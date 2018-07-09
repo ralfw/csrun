@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using csrun.data.domain;
 using csrun.domain.compiletime;
@@ -10,7 +11,7 @@ namespace csrun.tests
     public class CSRenderer_tests
     {
         [Test]
-        public void Render()
+        public void Render_just_main()
         {
             var csrunMain = new Sourcecode {
                 Filename = "main.csrun",
@@ -20,16 +21,37 @@ namespace csrun.tests
                 }
             };
 
-            
-            var result = CSRenderer.Render(csrunMain);
+            var csTemplate = @"using System;
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var prog = new Program();
+        prog.Run(args);
+    }
+
+    private void Run(string[] args)
+    {
+        #region main
+        #endregion
+    }
+  
+    #region functions
+    #endregion
+    
+    #region tests
+    #endregion
+}".Split(new[]{'\n'}, StringSplitOptions.RemoveEmptyEntries);
+
+            var result = Rendering.Render(csrunMain, csTemplate);
             
             Debug.WriteLine($"{string.Join("\n", result.Text)}");
             
             Assert.AreEqual("main.cs", result.Filename);
-            Assert.AreEqual(31, result.Text.Length);
+            Assert.AreEqual(22, result.Text.Length);
             Assert.AreEqual(1, result.LineMappings.Mappings.Count());
-            Assert.AreEqual(21, result.LineMappings.Mappings.First().DestinationFromLineNumber);
-            Assert.AreEqual(22, result.LineMappings.Mappings.First().DestinationToLineNumber);
+            Assert.AreEqual(12, result.LineMappings.Mappings.First().DestinationFromLineNumber);
+            Assert.AreEqual(13, result.LineMappings.Mappings.First().DestinationToLineNumber);
         }
     }
 }

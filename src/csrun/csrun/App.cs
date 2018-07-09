@@ -20,7 +20,8 @@ namespace csrun
         
         public void Execute(CLI.Command cmd) {
             var csrunSource = _fs.ReadSource(cmd.SourceFilename);
-            var csSource = CSRenderer.Render(csrunSource);
+            var csTemplate = _fs.LoadTemplate();
+            var csSource = Rendering.Render(csrunSource, csTemplate);
             var fp = new FailureMapper(csSource.LineMappings);
             CSCompiler.Compile(csSource,
                 onSuccess: exe => {
