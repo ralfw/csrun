@@ -43,7 +43,7 @@ public class Program
     #endregion
 }".Split(new[]{'\n'}, StringSplitOptions.RemoveEmptyEntries);
 
-            var result = Rendering.Render(csrunMain, csTemplate);
+            var result = Rendering.Render(new[]{csrunMain}, csTemplate);
             
             Debug.WriteLine($"{string.Join("\n", result.Text)}");
             
