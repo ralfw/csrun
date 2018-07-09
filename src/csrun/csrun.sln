@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csrun", "csrun\csrun.csproj", "{6F156A5B-C922-4766-A1B6-3A512CFEA140}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csrun.tests", "csrun.tests\csrun.tests.csproj", "{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F156A5B-C922-4766-A1B6-3A512CFEA140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F156A5B-C922-4766-A1B6-3A512CFEA140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F156A5B-C922-4766-A1B6-3A512CFEA140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F156A5B-C922-4766-A1B6-3A512CFEA140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
