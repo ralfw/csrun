@@ -3,6 +3,7 @@ using csrun.adapters.providers;
 using csrun.data.domain;
 using csrun.domain.compiletime;
 using csrun.domain.runtime;
+using csrun.domain.runtime.runners;
 
 namespace csrun.integration
 {

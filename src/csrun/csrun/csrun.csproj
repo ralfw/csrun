@@ -55,7 +55,9 @@
     <Compile Include="domain\compiletime\Dissection.cs" />
     <Compile Include="domain\runtime\Executable.cs" />
     <Compile Include="domain\runtime\FailureMapper.cs" />
-    <Compile Include="domain\runtime\Runners.cs" />
+    <Compile Include="domain\runtime\runners\MainRunner.cs" />
+    <Compile Include="domain\runtime\runners\IRunner.cs" />
+    <Compile Include="domain\runtime\runners\TestRunner.cs" />
     <Compile Include="integration\App.cs" />
     <Compile Include="integration\ResultEvaluation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
