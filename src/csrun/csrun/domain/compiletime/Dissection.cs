@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using csrun.data.domain;
 
 namespace csrun.domain.compiletime
@@ -10,9 +11,11 @@ namespace csrun.domain.compiletime
         {
             var mainSource = Extract_main_section(csrunSource.Filename, csrunSource.Text);
             var functionsSource = Extract_functions_section(csrunSource.Filename, csrunSource.Text);
+            var testSources = Extract_test_sections(csrunSource.Filename, csrunSource.Text);
 
             if (IsNotEmpty(mainSource)) yield return mainSource;
             if (IsNotEmpty(functionsSource)) yield return functionsSource;
+            foreach (var ts in testSources) yield return ts;
 
 
             bool IsNotEmpty(Sourcecode source) => source.Text.Length > 0;
@@ -66,6 +69,43 @@ namespace csrun.domain.compiletime
             }
             
             return (lines.ToArray(), fromLineNumber);
+        }
+        
+        
+        static IEnumerable<Sourcecode> Extract_test_sections(string filename, string[] text) {
+            var lines = new List<string>();
+            var fromLineNumber = 0;
+            var currLineNumber = 0;
+            
+            var inTest = false;
+            foreach (var l in text) {
+                currLineNumber++;
+                if (l.Trim().StartsWith("#test")) {
+                    fromLineNumber = currLineNumber + 1;
+                    inTest = true;
+                }
+                else if (l.Trim().StartsWith("#test")) {
+                    yield return BuildSection();
+                    fromLineNumber = currLineNumber + 1;
+                }
+                else if (l.Trim().StartsWith("#functions"))
+                    break;
+                else if (inTest)
+                    lines.Add(l);
+            }
+            if (lines.Count > 0) yield return BuildSection();
+
+
+            Sourcecode BuildSection() {
+                var csrunSource = new Sourcecode {
+                    Section = Sourcecode.Sections.CSRunTest,
+                    Filename = filename,
+                    OriginLineNumber = fromLineNumber,
+                    Text = lines.ToArray()
+                };
+                lines.Clear();
+                return csrunSource;
+            }
         }
     }
 }
