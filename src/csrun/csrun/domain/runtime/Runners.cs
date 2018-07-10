@@ -1,33 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace csrun.domain.runtime
 {
-    internal interface IRunner
-    {
-        void Run(Executable exe, Action<Exception> onException);
+    internal interface IRunner {
+        IEnumerable<RuntimeError> Run(Executable exe);
     }
     
     
     internal class MainRunner : IRunner
     {
-        public void Run(Executable exe, Action<Exception> onException) {
+        public IEnumerable<RuntimeError> Run(Executable exe) {
             try {
                 exe.Main();
+                return new RuntimeError[0];
             }
             catch (Exception ex) {
-                onException(ex);
-            }
-        }
-    }
-    
-    internal class TestRunner : IRunner
-    {
-        public void Run(Executable exe, Action<Exception> onException) {
-            try {
-                exe.Main();
-            }
-            catch (Exception ex) {
-                onException(ex);
+                return new[] {new RuntimeException(ex)};
             }
         }
     }

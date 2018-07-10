@@ -56,6 +56,7 @@
     <Compile Include="domain\runtime\Executable.cs" />
     <Compile Include="domain\runtime\FailureMapper.cs" />
     <Compile Include="domain\runtime\Runners.cs" />
+    <Compile Include="domain\runtime\RuntimeError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="template.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

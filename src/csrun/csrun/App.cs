@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -26,8 +26,8 @@ namespace csrun
             Compile(csSource,
                 exe => {
                     var runner = SelectRunner(cmd);
-                    runner.Run(exe,
-                        ex => HandleRuntimeException(ex, csSource));
+                    var errors = runner.Run(exe);
+                    HandleRuntimeErrors(errors.ToArray(), csSource);
                 }
             );
         }
@@ -48,8 +48,10 @@ namespace csrun
                 });
         }
 
-        void HandleRuntimeException(Exception ex, Sourcecode csSource) {
-            var failure = FailureMapper.MapRuntimeException(ex, csSource.Text);
+        void HandleRuntimeErrors(RuntimeError[] errors, Sourcecode csSource) {
+            if (!errors.Any()) return;
+            
+            var failure = FailureMapper.MapRuntimeException(errors.First(), csSource.Text);
             _failureLog.DisplayRuntimeFailure(failure);
         }
         
