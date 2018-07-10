@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace csrun.domain.runtime
+namespace csrun.data.domain
 {
     class RuntimeResult {}
     
@@ -12,7 +12,10 @@ namespace csrun.domain.runtime
             return _ex.ToString();
         }
     }
+    
+    class RuntimeSuccess : RuntimeResult {}
 
+    
     class TestFailure : RuntimeResult {
         private readonly string _label;
         private readonly Exception _ex;
@@ -27,9 +30,13 @@ namespace csrun.domain.runtime
         }
     }
 
-    class TestSuccess : RuntimeResult
-    {
-        
+    class TestSuccess : RuntimeResult {
+        private readonly string _label;
+        public TestSuccess(string label) {
+            _label = label;
+        }
+
+        public string Label => _label;
     }
 }
 

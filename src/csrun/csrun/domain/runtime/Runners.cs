@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using csrun.data.domain;
 
 namespace csrun.domain.runtime
 {
@@ -13,7 +14,7 @@ namespace csrun.domain.runtime
         public IEnumerable<RuntimeResult> Run(Executable exe) {
             try {
                 exe.Main();
-                return new RuntimeResult[0];
+                return new[] {new RuntimeSuccess() };
             }
             catch (Exception ex) {
                 return new[] {new RuntimeException(ex)};

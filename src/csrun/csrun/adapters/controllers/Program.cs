@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using csrun.adapters.providers;
+using csrun.integration;
 
 namespace csrun.adapters.controllers
 {

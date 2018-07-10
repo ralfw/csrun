@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Linq;
 using csrun.adapters.providers;
 using csrun.data.domain;
 using csrun.domain.compiletime;
 using csrun.domain.runtime;
 
-namespace csrun
+namespace csrun.integration
 {
     internal class App
     {
         private readonly Filesystem _fs;
         private readonly FailureLog _failureLog;
-        private readonly CLI.Command _cmd;
+        private CLI.Command _cmd;
+        private ResultEvaluation _reval;
 
         public App(Filesystem fs, FailureLog failureLog, CLI.Command cmd) {
             _fs = fs;
             _failureLog = failureLog;
             _cmd = cmd;
         }
-        
-        
+
+
         public void Execute() {
             var csSource = Transpile(_cmd.SourceFilename);
-            Compile(csSource,
-                exe => Run(exe, csSource)
+            _reval = new ResultEvaluation(csSource, _failureLog);
+            CSCompiler.Compile(csSource,
+                Run,
+                _reval.HandleCompilerErrors
             );
         }
 
@@ -38,22 +37,12 @@ namespace csrun
             return Rendering.Render(csrunSections.ToArray(), csTemplate);
         }
 
-        
-        void Compile(Sourcecode csSource, Action<Executable> onSuccess) {
-            CSCompiler.Compile(csSource,
-                onSuccess,
-                onFailure: compilerErrors => {
-                    var errors = FailureMapper.MapCompiletimeErrors(compilerErrors, csSource.Text);
-                    _failureLog.DisplayCompilerErrors(errors);
-                });
-        }
-
-        
-        void Run(Executable exe, Sourcecode csSource) {
+        void Run(Executable exe) {
             var runner = SelectRunner(_cmd);
-            var errors = runner.Run(exe);
-            HandleRuntimeResults(errors.ToArray(), csSource);
+            var results = runner.Run(exe);
+            _reval.HandleRuntimeResults(results.ToArray());
         }
+        
         
         private IRunner SelectRunner(CLI.Command cmd) {
             switch (cmd) {
@@ -62,13 +51,6 @@ namespace csrun
                 case CLI.RunCommand _:
                 default: return new MainRunner();
             }
-        }
-        
-        void HandleRuntimeResults(RuntimeResult[] results, Sourcecode csSource) {
-            if (!results.Any()) return;
-            
-            var failure = FailureMapper.MapRuntimeException(results.First(), csSource.Text);
-            _failureLog.DisplayRuntimeFailure(failure);
         }
     }
 }

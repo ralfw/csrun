@@ -1,5 +1,6 @@
 ﻿using System;
 using csrun.adapters.providers;
+using csrun.integration;
 using NUnit.Framework;
 
 namespace csrun.tests
