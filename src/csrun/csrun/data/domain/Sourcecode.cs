@@ -14,7 +14,7 @@ namespace csrun.data.domain
 
         public Sections Section;
         public string Filename;
+        public int OriginLineNumber;        
         public string[] Text;
-        public LineMappings LineMappings = new LineMappings();
     }
 }

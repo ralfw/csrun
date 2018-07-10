@@ -44,7 +44,6 @@
     <Compile Include="CSRenderer_tests.cs" />
     <Compile Include="Dissection_tests.cs" />
     <Compile Include="FailureMapper_tests.cs" />
-    <Compile Include="LineMappings_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

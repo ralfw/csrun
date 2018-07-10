@@ -20,53 +20,34 @@ namespace csrun.domain.compiletime
 
 
         static Sourcecode Extract_main_section(string filename, string[] text) {
-            var (mainText, fromLineNumber, toLineNumber) = Extract_main_source_text(text);
+            var (mainText, fromLineNumber) = Extract_main_source_text(text);
             
-            var mainSource = new Sourcecode {
+            return new Sourcecode {
                 Section = Sourcecode.Sections.CSRunMain,
                 Filename = filename,
+                OriginLineNumber = fromLineNumber,
                 Text = mainText,
             };
-            mainSource.LineMappings.Add(new LineMapping {
-                DesinationFilename = mainSource.Filename,
-                DestinationFromLineNumber = fromLineNumber,
-                DestinationToLineNumber = toLineNumber,
-                OriginFilename = filename,
-                OriginFromLineNumber = fromLineNumber
-            });
-            return mainSource;
         }
 
-        static (string[] text, int fromLineNumber, int toLineNumber) Extract_main_source_text(string[] text) {
-            var lines = new List<string>();
-            foreach (var l in text) {
-                if (l.Trim().StartsWith("#functions") || l.Trim().StartsWith("#test"))
-                    break;
-                lines.Add(l);
-            }
-            return (lines.ToArray(), 1, lines.Count);
+        static (string[] text, int fromLineNumber) Extract_main_source_text(string[] text) {
+            return (text.TakeWhile(l => !l.Trim().StartsWith("#functions") && !l.Trim().StartsWith("#test")).ToArray(), 
+                    1);
         }
 
 
         static Sourcecode Extract_functions_section(string filename, string[] text) {
-            var (functionsText, fromLineNumber, toLineNumber) = Extract_functions_source_text(text);
+            var (functionsText, fromLineNumber) = Extract_functions_source_text(text);
             
-            var functionsSource = new Sourcecode {
+            return new Sourcecode {
                 Section = Sourcecode.Sections.CSRunFunctions,
                 Filename = filename,
-                Text = functionsText,
+                OriginLineNumber = fromLineNumber,
+                Text = functionsText
             };
-            functionsSource.LineMappings.Add(new LineMapping {
-                DesinationFilename = functionsSource.Filename,
-                DestinationFromLineNumber = fromLineNumber,
-                DestinationToLineNumber = toLineNumber,
-                OriginFilename = filename,
-                OriginFromLineNumber = fromLineNumber
-            });
-            return functionsSource;
         }
 
-        static (string[] text, int fromLineNumber, int toLineNumber) Extract_functions_source_text(string[] text) {
+        static (string[] text, int fromLineNumber) Extract_functions_source_text(string[] text) {
             var lines = new List<string>();
             var fromLineNumber = 0;
             var currLineNumber = 0;
@@ -79,14 +60,12 @@ namespace csrun.domain.compiletime
                     fromLineNumber = currLineNumber + 1;
                 }
                 else if (l.Trim().StartsWith("#test"))
-                    inFunctions = false;
+                    break;
                 else if (inFunctions)
                     lines.Add(l);
             }
             
-            var toLineNumber = fromLineNumber + lines.Count - 1;
-
-            return (lines.ToArray(), fromLineNumber, toLineNumber);
+            return (lines.ToArray(), fromLineNumber);
         }
     }
 }

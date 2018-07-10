@@ -47,11 +47,11 @@
     <Compile Include="adapters\providers\Filesystem.cs" />
     <Compile Include="App.cs" />
     <Compile Include="data\domain\CompilerError.cs" />
-    <Compile Include="data\domain\LineMappings.cs" />
     <Compile Include="data\domain\Sourcecode.cs" />
     <Compile Include="domain\compiletime\CSCompiler.cs" />
     <Compile Include="domain\compiletime\Rendering.cs" />
     <Compile Include="domain\compiletime\Dissection.cs" />
+    <Compile Include="domain\OriginLabels.cs" />
     <Compile Include="domain\runtime\Executable.cs" />
     <Compile Include="domain\runtime\FailureMapper.cs" />
     <Compile Include="domain\runtime\Runners.cs" />

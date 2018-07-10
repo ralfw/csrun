@@ -21,10 +21,10 @@ namespace csrun
         
         public void Execute(CLI.Command cmd) {
             var csrunSource = _fs.ReadSource(cmd.SourceFilename);
-            var csRunSourceDissected = Dissection.Dissect(csrunSource);
+            var csrunSections = Dissection.Dissect(csrunSource);
             var csTemplate = _fs.LoadTemplate();
-            var csSource = Rendering.Render(csRunSourceDissected.ToArray(), csTemplate);
-            var fp = new FailureMapper(csSource.LineMappings);
+            var csSource = Rendering.Render(csrunSections.ToArray(), csTemplate);
+            var fp = new FailureMapper(csSource.Text);
             CSCompiler.Compile(csSource,
                 onSuccess: exe => {
                     var runner = SelectRunner(cmd);

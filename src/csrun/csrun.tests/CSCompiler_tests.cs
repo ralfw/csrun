@@ -35,15 +35,8 @@ Console.WriteLine(answer);
     #endregion
   }
 }
-".Split(new[] {'\n'})
+".Split('\n')
             };
-            csSource.LineMappings.Add(new LineMapping {
-                DesinationFilename = "program.cs",
-                DestinationFromLineNumber = 6,
-                DestinationToLineNumber = 7,
-                OriginFilename = "program.csrun",
-                OriginFromLineNumber = 1
-            });
 
             Executable result = null;
             CSCompiler.Compile(csSource,
@@ -84,7 +77,7 @@ Console.WriteLine(answer);
     #endregion
   }
 }
-".Split(new[] {'\n'})
+".Split('\n')
             };
 
             csrun.data.domain.CompilerError[] result = null;
