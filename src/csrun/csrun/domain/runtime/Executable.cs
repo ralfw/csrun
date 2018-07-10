@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace csrun.domain.runtime
@@ -15,6 +17,27 @@ namespace csrun.domain.runtime
             var tProg = _assm.GetType("Program");
             var mMain = tProg.GetMethod("Main");
             mMain.Invoke(null, new object[]{new string[0]});
+        }
+
+
+        public IEnumerable<string> Testmethodnames
+        {
+            get {
+                var tProg = _assm.GetType("Program");
+                var methods = tProg.GetMethods();
+                foreach (var m in methods) {
+                    if (m.GetCustomAttribute<NUnit.Framework.TestAttribute>() != null)
+                        yield return m.Name;
+                }
+            }
+        }
+
+        
+        public void Test(string testmethodnames) {
+            var tProg = _assm.GetType("Program");
+            var mTest = tProg.GetMethod(testmethodnames);
+            var oProg = Activator.CreateInstance(tProg);
+            mTest.Invoke(oProg, new object[0]);
         }
     }
 }
