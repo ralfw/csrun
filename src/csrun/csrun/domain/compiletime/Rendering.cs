@@ -17,12 +17,19 @@ namespace csrun.domain.compiletime
      * To later be able to map a csharp code line back to the original csrun code line labels are inserted
      * into the csharp code. Their syntax is:
      *
-     * originLabel ::= "//#origin" <line number in original csrun source> "," <original csrun source filename>
+     * originLabel ::= "//#origin" <line number in original csrun source> "," <original csrun source filename> .
      *
      * The text following this label is from the file referenced at the line named and extends until
      * the label "//#endorigin".
      *
-     * See also: FailureMapper{}
+     * Example:
+     *     ...
+     *     //#origin 12,example.csrun
+     *     ... // csrun code
+     *     //#endorigin
+     *     ...
+     *
+     * See also: FailureMapper{}, OriginLabels{}
      */
     internal static class Rendering
     {

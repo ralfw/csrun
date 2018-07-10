@@ -1,6 +1,10 @@
 ﻿namespace csrun.domain.runtime
 {
-    internal class OriginLabels
+    /*
+     * Origin labels are surround csrun code which gets inserted into csharp template code.
+     * See also: Rendering{}, FailureMapper{}
+     */
+    internal static class OriginLabels
     {
         private const string START_LABEL_PREFIX = "//#origin";
         private const string END_LABEL = "//#endorigin";

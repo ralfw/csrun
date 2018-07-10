@@ -38,7 +38,4 @@ namespace csrun.domain.runtime
             throw new InvalidOperationException($"Missing origin label for line number {lineNumber}!");
         }
     }
-
-
-
 }
