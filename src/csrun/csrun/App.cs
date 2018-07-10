@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Data;
+using System.Linq;
 using System.Runtime.InteropServices;
 using csrun.adapters.providers;
 using csrun.domain.compiletime;
@@ -22,7 +23,7 @@ namespace csrun
             var csrunSource = _fs.ReadSource(cmd.SourceFilename);
             var csRunSourceDissected = Dissection.Dissect(csrunSource);
             var csTemplate = _fs.LoadTemplate();
-            var csSource = Rendering.Render(csRunSourceDissected, csTemplate);
+            var csSource = Rendering.Render(csRunSourceDissected.ToArray(), csTemplate);
             var fp = new FailureMapper(csSource.LineMappings);
             CSCompiler.Compile(csSource,
                 onSuccess: exe => {

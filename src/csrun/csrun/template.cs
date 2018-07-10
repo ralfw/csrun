@@ -9,14 +9,12 @@ using NUnit.Framework;
 
 public class Program
 {
-    public static void Main(string[] args)
-    {
+    public static void Main(string[] args) {
         var prog = new Program();
         prog.Run(args);
     }
 
-    private void Run(string[] args)
-    {
+    private void Run(string[] args) {
         #region main
         #endregion
     }
@@ -24,6 +22,6 @@ public class Program
     #region functions
     #endregion
     
-    #region tests
+    #region test
     #endregion
 }
