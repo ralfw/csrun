@@ -20,7 +20,9 @@ namespace csrun.tests
             var fl = new FailureLog();
             var sut = new App(fs, fl);
             
-            sut.Execute(new CLI.RunCommand("example.csrun"));
+            var output = ConsoleOutput.Capture(() => sut.Execute(new CLI.RunCommand("app_test.csrun")));
+            
+            Assert.AreEqual("1+2=3", output.Trim());
         }
     }
 }

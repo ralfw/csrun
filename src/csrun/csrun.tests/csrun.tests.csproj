@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_tests.cs" />
+    <Compile Include="ConsoleOutput.cs" />
     <Compile Include="CSCompiler_tests.cs" />
     <Compile Include="CSRenderer_tests.cs" />
     <Compile Include="Dissection_tests.cs" />
@@ -49,6 +50,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app_test.csrun">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="paket.references" />
   </ItemGroup>
   <ItemGroup>

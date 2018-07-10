@@ -48,17 +48,11 @@ Console.WriteLine(answer);
                 });
             
             Assert.NotNull(result);
-            
-            
-            var sw = new StringWriter();
-            var currStdOut = Console.Out;
-            Console.SetOut(sw);
 
-            result.Main();
 
-            Console.SetOut(currStdOut); // Wichtig! Zuerst zurücksetzen, bevor auf sw zugegriffen wird.
+            var output = ConsoleOutput.Capture(() => result.Main());
             
-            Assert.AreEqual("42", sw.ToString().Trim());
+            Assert.AreEqual("42", output.Trim());
         }
         
         
