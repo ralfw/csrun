@@ -52,7 +52,7 @@ namespace csrun
         void Run(Executable exe, Sourcecode csSource) {
             var runner = SelectRunner(_cmd);
             var errors = runner.Run(exe);
-            HandleRuntimeErrors(errors.ToArray(), csSource);
+            HandleRuntimeResults(errors.ToArray(), csSource);
         }
         
         private IRunner SelectRunner(CLI.Command cmd) {
@@ -64,10 +64,10 @@ namespace csrun
             }
         }
         
-        void HandleRuntimeErrors(RuntimeError[] errors, Sourcecode csSource) {
-            if (!errors.Any()) return;
+        void HandleRuntimeResults(RuntimeResult[] results, Sourcecode csSource) {
+            if (!results.Any()) return;
             
-            var failure = FailureMapper.MapRuntimeException(errors.First(), csSource.Text);
+            var failure = FailureMapper.MapRuntimeException(results.First(), csSource.Text);
             _failureLog.DisplayRuntimeFailure(failure);
         }
     }

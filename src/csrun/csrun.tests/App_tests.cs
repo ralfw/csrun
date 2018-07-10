@@ -18,9 +18,10 @@ namespace csrun.tests
         {
             var fs = new Filesystem();
             var fl = new FailureLog();
-            var sut = new App(fs, fl);
+            var cmd = new CLI.RunCommand("app_test.csrun");
+            var sut = new App(fs, fl, cmd);
             
-            var output = ConsoleOutput.Capture(() => sut.Execute(new CLI.RunCommand("app_test.csrun")));
+            var output = ConsoleOutput.Capture(() => sut.Execute());
             
             Assert.AreEqual("1+2=3", output.Trim());
         }

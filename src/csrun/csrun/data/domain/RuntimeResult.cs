@@ -2,9 +2,9 @@
 
 namespace csrun.domain.runtime
 {
-    class RuntimeError {}
+    class RuntimeResult {}
     
-    class RuntimeException : RuntimeError {
+    class RuntimeException : RuntimeResult {
         private readonly Exception _ex;
         public RuntimeException(Exception ex) { _ex = ex; }
 
@@ -13,7 +13,7 @@ namespace csrun.domain.runtime
         }
     }
 
-    class TestFailure : RuntimeError {
+    class TestFailure : RuntimeResult {
         private readonly string _label;
         private readonly Exception _ex;
 
@@ -25,6 +25,11 @@ namespace csrun.domain.runtime
         public override string ToString() {
             return $"Test failed: '{_label}': {_ex}";
         }
+    }
+
+    class TestSuccess : RuntimeResult
+    {
+        
     }
 }
 

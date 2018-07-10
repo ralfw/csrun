@@ -8,8 +8,8 @@ namespace csrun.domain.runtime
 {
     internal static class FailureMapper
     {
-        public static string MapRuntimeException(RuntimeError error, string[] csSourceText) {
-            return $"{error}";
+        public static string MapRuntimeException(RuntimeResult result, string[] csSourceText) {
+            return $"{result}";
         }
 
         
