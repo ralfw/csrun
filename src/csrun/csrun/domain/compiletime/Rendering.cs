@@ -70,7 +70,7 @@ namespace csrun.domain.compiletime
             string[] Render_source() {
                 switch (csrunSection.Section) {
                     case Sourcecode.Sections.CSRunTest:
-                        return new[] {$"public void {Create_test_function_name(csrunSection.Label)}()" + "{"}
+                        return new[] {$"[NUnit.Framework.Test]public void {Create_test_function_name(csrunSection.Label)}()" + "{"}
                                     .Concat(csrunSection.Text)
                                     .Concat(new[] { "}" })
                                     .ToArray();
@@ -80,7 +80,7 @@ namespace csrun.domain.compiletime
 
             string Create_test_function_name(string label) {
                 label = label.Trim().Replace(" ", "_");
-                return $"@Test_{Guid.NewGuid().ToString().Replace("-", "")}@{label}";
+                return $"Test{Guid.NewGuid().ToString().Replace("-", "")}__{label}";
             }
         }
     }
