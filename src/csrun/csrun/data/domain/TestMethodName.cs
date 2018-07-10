@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Linq;
 
 namespace csrun.data.domain
 {
     internal class TestMethodName
     {
         public TestMethodName(string label) {
-            label = label.Trim().Replace(" ", "_");
+            label = new string(label.Trim().Select(DefuseInvalidChars).ToArray());
             this.Value = $"Test{Guid.NewGuid().ToString().Replace("-", "")}__{label}";
+
+            char DefuseInvalidChars(char c)
+                => "@abcdefghijklmnopqrstuvwxyzäöüß".IndexOf(char.ToLower(c)) >= 0 ? c : '_';
         }
         
         public string Value { get; }
