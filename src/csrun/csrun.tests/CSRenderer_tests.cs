@@ -11,33 +11,93 @@ namespace csrun.tests
     public class CSRenderer_tests
     {
         [Test]
-        public void Render_just_main()
+        public void Render_main_functions_tests()
         {
-            var csrunMain = new Sourcecode {
-                Section = Sourcecode.Sections.CSRunMain,
-                Filename = "main.csrun",
-                Text = new[] {
-                    "var answer = 42;",
-                    "Console.WriteLine(answer);"
+            var sections = new[]
+            {
+                new Sourcecode {
+                    Section = Sourcecode.Sections.CSRunMain,
+                    Filename = "main.csrun",
+                    Text = new[] {
+                        "m1",
+                        "m2"
+                    },
+                    OriginLineNumber = 1
                 },
-                OriginLineNumber = 1
+                new Sourcecode {
+                    Section = Sourcecode.Sections.CSRunFunctions,
+                    Filename = "main.csrun",
+                    Text = new[] {
+                        "f1.1",
+                        "f1.2"
+                    },
+                    OriginLineNumber = 10
+                },
+                new Sourcecode {
+                    Section = Sourcecode.Sections.CSRunTest,
+                    Filename = "main.csrun",
+                    Label = "Test 1",
+                    Text = new[] {
+                        "t1.1",
+                        "t1.2"
+                    },
+                    OriginLineNumber = 100
+                },
+                new Sourcecode {
+                    Section = Sourcecode.Sections.CSRunTest,
+                    Filename = "main.csrun",
+                    Label = "Test 2",
+                    Text = new[] {
+                        "t2.1",
+                        "t2.2"
+                    },
+                    OriginLineNumber = 200
+                },
+                new Sourcecode {
+                    Section = Sourcecode.Sections.CSRunFunctions,
+                    Filename = "main.csrun",
+                    Text = new[] {
+                        "f2.1",
+                        "f2.2"
+                    },
+                    OriginLineNumber = 20
+                },
+                new Sourcecode {
+                    Section = Sourcecode.Sections.CSRunTest,
+                    Filename = "main.csrun",
+                    Label = "",
+                    Text = new[] {
+                        "t3.1",
+                        "t3.2",
+                        "t3.3"
+                    },
+                    OriginLineNumber = 300
+                }
             };
 
             var csTemplate = @"1
 2
         #region main
         #endregion
-5".Split('\n');
+5
+        #region functions
+        #endregion
+6
+        #region test
+        #endregion
+11".Split('\n');
 
-            var result = Rendering.Render(new[]{csrunMain}, csTemplate);
+            var result = Rendering.Render(sections, csTemplate);
             var csSource = string.Join("\n", result.Text);
             
             Console.WriteLine($"{csSource}");
             
             Assert.AreEqual("main.cs", result.Filename);
-            Assert.AreEqual(9, result.Text.Length);            
+            Assert.AreEqual(36, result.Text.Length);            
             Assert.IsTrue(csSource.IndexOf("//#origin 1,main.csrun") > 0);
             Assert.IsTrue(csSource.IndexOf("//#endorigin") > 0);
+            Assert.IsTrue(csSource.IndexOf("//#origin 20,main.csrun") > 0);
+            Assert.IsTrue(csSource.IndexOf("//#origin 300,main.csrun") > 0);
         }
     }
 }

@@ -35,39 +35,35 @@ namespace csrun.domain.compiletime
     {
         public static Sourcecode Render(Sourcecode[] csrunSections, string[] csTemplate)
         {
-            var csText = Render_section(Sourcecode.Sections.CSRunMain, csrunSections, csTemplate);
-            csText = Render_section(Sourcecode.Sections.CSRunFunctions, csrunSections, csText);
             return new Sourcecode {
                 Section = Sourcecode.Sections.CSharp,
                 Filename = Path.GetFileNameWithoutExtension(csrunSections.First().Filename) + ".cs",
-                Text = csText
+                Text = csrunSections.Aggregate(csTemplate, Render_section)
             };
         }
 
 
-        static string[] Render_section(Sourcecode.Sections section, IEnumerable<Sourcecode> csrunSections, string[] csText) {
-            var sectionSource = csrunSections.FirstOrDefault(s => s.Section == section);
-            if (sectionSource == null) return csText;
-
-            var regionStartLineNumber = csText.Select((line, index) => new {LineNumber = index + 1, Text = line})
+        static string[] Render_section(string[] csTemplate, Sourcecode csrunSection) {
+            var regionStartLineNumber = csTemplate.Select((line, index) => new {LineNumber = index + 1, Text = line})
                                               .First(line => line.Text.IndexOf(Regionname()) >= 0)
                                               .LineNumber;
-            var csBeforeMain = csText.Take(regionStartLineNumber);
-            var csAfterMain = csText.Skip(regionStartLineNumber);
+            var csBeforeSection = csTemplate.Take(regionStartLineNumber);
+            var csAfterSection = csTemplate.Skip(regionStartLineNumber);
 
-            var originLabels = OriginLabels.Create(sectionSource.Filename, sectionSource.OriginLineNumber);
-            return csBeforeMain.Concat(new[] {originLabels.startLabel})
-                               .Concat(sectionSource.Text)
+            var originLabels = OriginLabels.Create(csrunSection.Filename, csrunSection.OriginLineNumber);
+            return csBeforeSection.Concat(new[] {originLabels.startLabel})
+                               .Concat(csrunSection.Text)
                                .Concat(new[] {originLabels.endLabel})
-                               .Concat(csAfterMain)
+                               .Concat(csAfterSection)
                                .ToArray();
 
 
             string Regionname() {
-                switch (section) {
+                switch (csrunSection.Section) {
                     case Sourcecode.Sections.CSRunMain: return "#region main";
                     case Sourcecode.Sections.CSRunFunctions: return "#region functions";
-                    default: throw new InvalidOperationException();
+                    case Sourcecode.Sections.CSRunTest: return "#region test";
+                    default: throw new InvalidOperationException($"Cannot render section type {csrunSection.Section}!");
                 }
             }
         }
