@@ -1,19 +1,27 @@
-﻿namespace csrun.domain.runtime
+﻿namespace csrun.data.domain
 {
     /*
      * Origin labels are surround csrun code which gets inserted into csharp template code.
      * See also: Rendering{}, FailureMapper{}
      */
-    internal static class OriginLabels
+    internal class OriginLabels
     {
         private const string START_LABEL_PREFIX = "//#origin";
         private const string END_LABEL = "//#endorigin";
         
-        public static (string startLabel, string endLabel) Create(string filename, int lineNumber) {
-            return ($"{START_LABEL_PREFIX} {lineNumber},{filename}",
-                END_LABEL);
-        }
+        private readonly string _filename;
+        private readonly int _lineNumber;
 
+        public OriginLabels(string filename, int lineNumber) {
+            _filename = filename;
+            _lineNumber = lineNumber;
+        }
+        
+
+        public string StartLabel => $"{START_LABEL_PREFIX} {_lineNumber},{_filename}";
+        public string EndLabel => END_LABEL;
+
+        
         public static bool TryParse(string line, out string filename, out int lineNumber) {
             filename = "";
             lineNumber = -1;

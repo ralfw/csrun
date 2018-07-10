@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using csrun.data.domain;
 
-namespace csrun
+namespace csrun.adapters.providers
 {
     internal class Filesystem
     {

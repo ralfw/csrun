@@ -50,10 +50,10 @@ namespace csrun.domain.compiletime
             var csBeforeSection = csTemplate.Take(regionStartLineNumber);
             var csAfterSection = csTemplate.Skip(regionStartLineNumber);
 
-            var originLabels = OriginLabels.Create(csrunSection.Filename, csrunSection.OriginLineNumber);
-            return csBeforeSection.Concat(new[] {originLabels.startLabel})
+            var originLabels = new OriginLabels(csrunSection.Filename, csrunSection.OriginLineNumber);
+            return csBeforeSection.Concat(new[] {originLabels.StartLabel})
                                .Concat(Render_source())
-                               .Concat(new[] {originLabels.endLabel})
+                               .Concat(new[] {originLabels.EndLabel})
                                .Concat(csAfterSection)
                                .ToArray();
 
@@ -70,17 +70,13 @@ namespace csrun.domain.compiletime
             string[] Render_source() {
                 switch (csrunSection.Section) {
                     case Sourcecode.Sections.CSRunTest:
-                        return new[] {$"[NUnit.Framework.Test]public void {Create_test_function_name(csrunSection.Label)}()" + "{"}
+                        var fn = new TestFunctionName(csrunSection.Label);
+                        return new[] {$"[NUnit.Framework.Test]public void {fn.Value}()" + "{"}
                                     .Concat(csrunSection.Text)
                                     .Concat(new[] { "}" })
                                     .ToArray();
                     default: return csrunSection.Text;
                 }
-            }
-
-            string Create_test_function_name(string label) {
-                label = label.Trim().Replace(" ", "_");
-                return $"Test{Guid.NewGuid().ToString().Replace("-", "")}__{label}";
             }
         }
     }
