@@ -1,10 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using csrun.data.domain;
 
 namespace csrun.domain.compiletime
 {
+    /*
+     * csrun code is made up of different sections:
+     *     - the main section is code to be executed in run-mode. it's not prefixed and is defined at the beginning
+     *       of the csrun source.
+     *     - the functions section is code containing function definitions. these functions get called from other
+     *       functions or main code or test code. it's prefixed by #functions.
+     *     - each test needs to be prefixed by #test followed by a label. tests are run in test- and watch-mode.
+     *
+     * there may only be one main section and one functions section in the csrun code.
+     */
     internal static class Dissection
     {
         public static IEnumerable<Sourcecode> Dissect(Sourcecode csrunSource)
@@ -73,7 +84,9 @@ namespace csrun.domain.compiletime
         
         
         static IEnumerable<Sourcecode> Extract_test_sections(string filename, string[] text) {
-            var lines = new List<string>();
+            var sections = new List<Sourcecode>();
+            var header = "";
+            var body = new List<string>();
             var fromLineNumber = 0;
             var currLineNumber = 0;
             
@@ -81,30 +94,36 @@ namespace csrun.domain.compiletime
             foreach (var l in text) {
                 currLineNumber++;
                 if (l.Trim().StartsWith("#test")) {
+                    BuildSection();
+                    header = l.Trim();
                     fromLineNumber = currLineNumber + 1;
                     inTest = true;
                 }
-                else if (l.Trim().StartsWith("#test")) {
-                    yield return BuildSection();
-                    fromLineNumber = currLineNumber + 1;
+                else if (l.Trim().StartsWith("#functions")) {
+                    BuildSection();
+                    inTest = false;
                 }
-                else if (l.Trim().StartsWith("#functions"))
-                    break;
                 else if (inTest)
-                    lines.Add(l);
+                    body.Add(l);
             }
-            if (lines.Count > 0) yield return BuildSection();
+            BuildSection();
+            return sections;
 
 
-            Sourcecode BuildSection() {
+            void BuildSection() {
+                if (body.Count == 0) return;
+
+                var testLabel = header.Substring("#test".Length).Trim();
+                
                 var csrunSource = new Sourcecode {
                     Section = Sourcecode.Sections.CSRunTest,
-                    Filename = filename,
+                    Filename = $"{filename}#{testLabel}",
                     OriginLineNumber = fromLineNumber,
-                    Text = lines.ToArray()
+                    Text = body.ToArray()
                 };
-                lines.Clear();
-                return csrunSource;
+                body.Clear();
+                
+                sections.Add(csrunSource);
             }
         }
     }
