@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
 using csrun.adapters.providers;
+using csrun.data.domain;
 using csrun.domain.compiletime;
 using csrun.domain.runtime;
 
@@ -20,27 +22,38 @@ namespace csrun
         
         
         public void Execute(CLI.Command cmd) {
-            var csrunSource = _fs.ReadSource(cmd.SourceFilename);
-            var csrunSections = Dissection.Dissect(csrunSource);
-            var csTemplate = _fs.LoadTemplate();
-            var csSource = Rendering.Render(csrunSections.ToArray(), csTemplate);
-            var fp = new FailureMapper(csSource.Text);
-            CSCompiler.Compile(csSource,
-                onSuccess: exe => {
+            var csSource = Transpile(cmd.SourceFilename);
+            Compile(csSource,
+                exe => {
                     var runner = SelectRunner(cmd);
                     runner.Run(exe,
-                        onException: ex => {
-                            var failure = fp.MapRuntimeException(ex);
-                            _failureLog.DisplayRuntimeFailure(failure);
-                        });
-                },
+                        ex => HandleRuntimeException(ex, csSource));
+                }
+            );
+        }
+
+        Sourcecode Transpile(string csrunFilename) {
+            var csrunSource = _fs.ReadSource(csrunFilename);
+            var csrunSections = Dissection.Dissect(csrunSource);
+            var csTemplate = _fs.LoadTemplate();
+            return Rendering.Render(csrunSections.ToArray(), csTemplate);
+        }
+
+        void Compile(Sourcecode csSource, Action<Executable> onSuccess) {
+            CSCompiler.Compile(csSource,
+                onSuccess,
                 onFailure: compilerErrors => {
-                    var errors = fp.MapCompiletimeErrors(compilerErrors);
+                    var errors = FailureMapper.MapCompiletimeErrors(compilerErrors, csSource.Text);
                     _failureLog.DisplayCompilerErrors(errors);
                 });
         }
 
-
+        void HandleRuntimeException(Exception ex, Sourcecode csSource) {
+            var failure = FailureMapper.MapRuntimeException(ex, csSource.Text);
+            _failureLog.DisplayRuntimeFailure(failure);
+        }
+        
+        
         private IRunner SelectRunner(CLI.Command cmd) {
             switch (cmd) {
                 case CLI.TestCommand _:

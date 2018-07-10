@@ -20,14 +20,13 @@ namespace csrun.tests
 5->2
 //#endorigin
 7".Split('\n');
-            var sut = new FailureMapper(csSource);
             
-            var result = sut.MapCompiletimeErrors(new[] {new CompilerError {
+            var result = FailureMapper.MapCompiletimeErrors(new[] {new CompilerError {
                 Filename = "destination.cs",
                 LineNumber = 5,
                 ColumnNumber = 10,
                 Description = "desc"
-            }});
+            }}, csSource);
 
             Assert.IsTrue(result.First().StartsWith($"origin.csrun-2,"));
         }
@@ -43,14 +42,13 @@ namespace csrun.tests
 5->2
 //#endorigin
 7".Split('\n');
-            var sut = new FailureMapper(csSource);
             
-            var result = sut.MapCompiletimeErrors(new[] {new CompilerError {
+            var result = FailureMapper.MapCompiletimeErrors(new[] {new CompilerError {
                 Filename = "destination.cs",
                 LineNumber = 6,
                 ColumnNumber = 0,
                 Description = "desc"
-            }});
+            }}, csSource);
 
             Console.WriteLine(result.First());
             

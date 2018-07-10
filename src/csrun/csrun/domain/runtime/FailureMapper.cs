@@ -6,32 +6,25 @@ using csrun.data.domain;
 
 namespace csrun.domain.runtime
 {
-    internal class FailureMapper
+    internal static class FailureMapper
     {
-        private readonly string[] _csSource;
-
-        public FailureMapper(string[] csSource) {
-            _csSource = csSource;
-        }
-
-        
-        public string MapRuntimeException(Exception exception) {
+        public static string MapRuntimeException(Exception exception, string[] csSourceText) {
             return $"{exception}";
         }
 
         
-        public string[] MapCompiletimeErrors(IEnumerable<CompilerError> compilerErrors) {
+        public static string[] MapCompiletimeErrors(IEnumerable<CompilerError> compilerErrors, string[] csSourceText) {
             return compilerErrors.Select(MapError).ToArray();
 
             string MapError(CompilerError error) {
-                var (originFilename, originLineNumber) = MapLineNumber(error.LineNumber);
+                var (originFilename, originLineNumber) = MapLineNumber(error.LineNumber, csSourceText);
                 return $"{originFilename}-{originLineNumber},{error.ColumnNumber}: {error.Description}";
             }
         }
 
-        private (string originFilename, int originLineNumber) MapLineNumber(int lineNumber) {
+        private static (string originFilename, int originLineNumber) MapLineNumber(int lineNumber, string[] csSourceText) {
             for(var i=lineNumber; i>=1; i--)
-                if (OriginLabels.TryParse(_csSource[i-1], out var originFilename, out var originStartLineNumber)) {
+                if (OriginLabels.TryParse(csSourceText[i-1], out var originFilename, out var originStartLineNumber)) {
                     return (originFilename,
                             originStartLineNumber + (lineNumber - i) - 1);
                 }

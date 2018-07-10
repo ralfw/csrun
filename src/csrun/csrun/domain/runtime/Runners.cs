@@ -19,4 +19,16 @@ namespace csrun.domain.runtime
             }
         }
     }
+    
+    internal class TestRunner : IRunner
+    {
+        public void Run(Executable exe, Action<Exception> onException) {
+            try {
+                exe.Main();
+            }
+            catch (Exception ex) {
+                onException(ex);
+            }
+        }
+    }
 }
