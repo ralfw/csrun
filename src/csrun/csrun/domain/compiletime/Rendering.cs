@@ -70,7 +70,7 @@ namespace csrun.domain.compiletime
             string[] Render_source() {
                 switch (csrunSection.Section) {
                     case Sourcecode.Sections.CSRunTest:
-                        var fn = new TestFunctionName(csrunSection.Label);
+                        var fn = new TestMethodName(csrunSection.Label);
                         return new[] {$"[NUnit.Framework.Test]public void {fn.Value}()" + "{"}
                                     .Concat(csrunSection.Text)
                                     .Concat(new[] { "}" })

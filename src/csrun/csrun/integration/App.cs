@@ -24,7 +24,7 @@ namespace csrun.integration
                 switch (cmd) {
                     case CLI.TestCommand _:
                     case CLI.WatchCommand _:
-                    case CLI.RunCommand _:
+                        return new TestRunner();
                     default: return new MainRunner();
                 }
             }

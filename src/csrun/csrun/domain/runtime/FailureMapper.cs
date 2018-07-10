@@ -11,6 +11,11 @@ namespace csrun.domain.runtime
         public static string MapRuntimeException(Exception ex, string[] csSourceText) {
             return $"{ex}";
         }
+        
+        
+        public static string MapTestException(Exception ex, string[] csSourceText) {
+            return $"{ex.InnerException.Message}";
+        }
 
         
         public static string[] MapCompiletimeErrors(IEnumerable<CompilerError> compilerErrors, string[] csSourceText) {

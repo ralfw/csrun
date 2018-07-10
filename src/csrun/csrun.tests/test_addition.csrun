@@ -1,0 +1,9 @@
+var a = 1;
+var b = 2;
+var r = Add(a,b);
+Console.WriteLine($"{a}+{b}={r}");
+
+#functions
+int Add(int a, int b) {
+    return a + b;
+}

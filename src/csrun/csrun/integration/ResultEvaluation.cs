@@ -46,7 +46,7 @@ namespace csrun.integration
             if (!testFailures.Any()) return;
 
             foreach (var tf in testFailures) {
-                var failure = FailureMapper.MapRuntimeException(tf.Exception, _csSource.Text);
+                var failure = FailureMapper.MapTestException(tf.Exception, _csSource.Text);
                 _log.DisplayTestFailure(tf.Label, failure);
             }
         }

@@ -2,7 +2,6 @@
 using System.Linq;
 using csrun.data.domain;
 using csrun.domain.runtime;
-using csrun.data.domain;
 using NUnit.Framework;
 
 namespace csrun.tests

@@ -25,11 +25,13 @@ namespace csrun.adapters.providers
             var currColor = Console.BackgroundColor;
             foreach (var r in results) {
                 Console.BackgroundColor = r.success ? ConsoleColor.Green : ConsoleColor.Red;
-                Console.WriteLine($"{r.label}");
+                var bulletpoint = r.success ? '+' : '-';
+                Console.Write($"{bulletpoint} {r.label}");
+                Console.BackgroundColor = currColor;
+                Console.WriteLine();
             }
-            Console.BackgroundColor = currColor;
             
-            Console.WriteLine($"{results.Length} tests, {succeeded} succeeded, {results.Length-succeeded} failed");
+            Console.WriteLine($"= {results.Length} tests, {succeeded} succeeded, {results.Length-succeeded} failed");
         }
         
         public void DisplayTestFailure(string label, string failure) {

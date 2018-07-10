@@ -2,9 +2,9 @@
 
 namespace csrun.data.domain
 {
-    internal class TestFunctionName
+    internal class TestMethodName
     {
-        public TestFunctionName(string label) {
+        public TestMethodName(string label) {
             label = label.Trim().Replace(" ", "_");
             this.Value = $"Test{Guid.NewGuid().ToString().Replace("-", "")}__{label}";
         }
