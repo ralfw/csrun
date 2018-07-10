@@ -102,7 +102,7 @@ t1.2
 #test test 2
 t2.1
 t2.2
-#test test 3
+#test
 t3.1
 t3.2
 t3.3".Split('\n')
@@ -120,17 +120,20 @@ t3.3".Split('\n')
             Assert.AreEqual(4, result[1].OriginLineNumber);
             
             Assert.AreEqual(Sourcecode.Sections.CSRunTest, result[2].Section);
-            Assert.AreEqual("main.csrun#test 1", result[2].Filename);
+            Assert.AreEqual("main.csrun", result[2].Filename);
+            Assert.AreEqual("test 1", result[2].Label);
             Assert.AreEqual(new[]{"t1.1","t1.2"}, result[2].Text);
             Assert.AreEqual(7, result[2].OriginLineNumber);
             
             Assert.AreEqual(Sourcecode.Sections.CSRunTest, result[3].Section);
-            Assert.AreEqual("main.csrun#test 2", result[3].Filename);
+            Assert.AreEqual("main.csrun", result[3].Filename);
+            Assert.AreEqual("test 2", result[3].Label);
             Assert.AreEqual(new[]{"t2.1","t2.2"}, result[3].Text);
             Assert.AreEqual(10, result[3].OriginLineNumber);
             
             Assert.AreEqual(Sourcecode.Sections.CSRunTest, result[4].Section);
-            Assert.AreEqual("main.csrun#test 3", result[4].Filename);
+            Assert.AreEqual("main.csrun", result[4].Filename);
+            Assert.AreEqual("", result[4].Label);
             Assert.AreEqual(new[]{"t3.1","t3.2","t3.3"}, result[4].Text);
             Assert.AreEqual(13, result[4].OriginLineNumber);
             

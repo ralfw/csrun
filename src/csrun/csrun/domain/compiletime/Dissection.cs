@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
 using csrun.data.domain;
@@ -117,7 +118,8 @@ namespace csrun.domain.compiletime
                 
                 var csrunSource = new Sourcecode {
                     Section = Sourcecode.Sections.CSRunTest,
-                    Filename = $"{filename}#{testLabel}",
+                    Filename = filename,
+                    Label = testLabel,
                     OriginLineNumber = fromLineNumber,
                     Text = body.ToArray()
                 };
