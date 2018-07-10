@@ -14,24 +14,23 @@ namespace csrun
     {
         private readonly Filesystem _fs;
         private readonly FailureLog _failureLog;
+        private readonly CLI.Command _cmd;
 
-        public App(Filesystem fs, FailureLog failureLog) {
+        public App(Filesystem fs, FailureLog failureLog, CLI.Command cmd) {
             _fs = fs;
             _failureLog = failureLog;
+            _cmd = cmd;
         }
         
         
-        public void Execute(CLI.Command cmd) {
-            var csSource = Transpile(cmd.SourceFilename);
+        public void Execute() {
+            var csSource = Transpile(_cmd.SourceFilename);
             Compile(csSource,
-                exe => {
-                    var runner = SelectRunner(cmd);
-                    var errors = runner.Run(exe);
-                    HandleRuntimeErrors(errors.ToArray(), csSource);
-                }
+                exe => Run(exe, csSource)
             );
         }
 
+        
         Sourcecode Transpile(string csrunFilename) {
             var csrunSource = _fs.ReadSource(csrunFilename);
             var csrunSections = Dissection.Dissect(csrunSource);
@@ -39,6 +38,7 @@ namespace csrun
             return Rendering.Render(csrunSections.ToArray(), csTemplate);
         }
 
+        
         void Compile(Sourcecode csSource, Action<Executable> onSuccess) {
             CSCompiler.Compile(csSource,
                 onSuccess,
@@ -48,13 +48,12 @@ namespace csrun
                 });
         }
 
-        void HandleRuntimeErrors(RuntimeError[] errors, Sourcecode csSource) {
-            if (!errors.Any()) return;
-            
-            var failure = FailureMapper.MapRuntimeException(errors.First(), csSource.Text);
-            _failureLog.DisplayRuntimeFailure(failure);
-        }
         
+        void Run(Executable exe, Sourcecode csSource) {
+            var runner = SelectRunner(_cmd);
+            var errors = runner.Run(exe);
+            HandleRuntimeErrors(errors.ToArray(), csSource);
+        }
         
         private IRunner SelectRunner(CLI.Command cmd) {
             switch (cmd) {
@@ -63,6 +62,13 @@ namespace csrun
                 case CLI.RunCommand _:
                 default: return new MainRunner();
             }
+        }
+        
+        void HandleRuntimeErrors(RuntimeError[] errors, Sourcecode csSource) {
+            if (!errors.Any()) return;
+            
+            var failure = FailureMapper.MapRuntimeException(errors.First(), csSource.Text);
+            _failureLog.DisplayRuntimeFailure(failure);
         }
     }
 }

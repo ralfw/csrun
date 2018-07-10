@@ -20,9 +20,9 @@ namespace csrun.adapters.controllers
             
             var fs = new Filesystem();
             var ui = new FailureLog();
-            var app = new App(fs, ui);
+            var app = new App(fs, ui, cmd);
             
-            app.Execute(cmd);
+            app.Execute();
         }
     }
 }
