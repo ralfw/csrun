@@ -33,6 +33,21 @@ namespace csrun.integration
 
 
         public void Execute() {
+            switch (_cmd) {
+                case CLI.RunCommand _:
+                case CLI.TestCommand _:
+                    ExecuteOnce();
+                    break;
+                case CLI.WatchCommand _:
+                    var watcher = new Watcher(_cmd.SourceFilename);
+                    watcher.Start(
+                        ExecuteOnce);
+                    break;
+            }
+        }
+        
+        
+        private void ExecuteOnce() {
             var csSource = Transpile(_cmd.SourceFilename);
             _reval = new ResultEvaluation(csSource, _failureLog);
             CSCompiler.Compile(csSource,

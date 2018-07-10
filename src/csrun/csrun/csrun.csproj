@@ -45,6 +45,7 @@
     <Compile Include="adapters\providers\CLI.cs" />
     <Compile Include="adapters\providers\FailureLog.cs" />
     <Compile Include="adapters\providers\Filesystem.cs" />
+    <Compile Include="adapters\providers\Watcher.cs" />
     <Compile Include="data\domain\CompilerError.cs" />
     <Compile Include="data\domain\OriginLabels.cs" />
     <Compile Include="data\domain\RuntimeResults.cs" />
