@@ -47,7 +47,7 @@
     <Compile Include="adapters\providers\Filesystem.cs" />
     <Compile Include="data\domain\CompilerError.cs" />
     <Compile Include="data\domain\OriginLabels.cs" />
-    <Compile Include="data\domain\RuntimeResult.cs" />
+    <Compile Include="data\domain\RuntimeResults.cs" />
     <Compile Include="data\domain\Sourcecode.cs" />
     <Compile Include="data\domain\TestFunctionName.cs" />
     <Compile Include="domain\compiletime\CSCompiler.cs" />

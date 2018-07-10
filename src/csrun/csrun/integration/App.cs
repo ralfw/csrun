@@ -10,13 +10,24 @@ namespace csrun.integration
     {
         private readonly Filesystem _fs;
         private readonly FailureLog _failureLog;
-        private CLI.Command _cmd;
+        private readonly CLI.Command _cmd;
         private ResultEvaluation _reval;
+        private readonly IRunner _runner;
 
         public App(Filesystem fs, FailureLog failureLog, CLI.Command cmd) {
             _fs = fs;
             _failureLog = failureLog;
             _cmd = cmd;
+            _runner = SelectRunner();
+            
+            IRunner SelectRunner() {
+                switch (cmd) {
+                    case CLI.TestCommand _:
+                    case CLI.WatchCommand _:
+                    case CLI.RunCommand _:
+                    default: return new MainRunner();
+                }
+            }
         }
 
 
@@ -37,20 +48,10 @@ namespace csrun.integration
             return Rendering.Render(csrunSections.ToArray(), csTemplate);
         }
 
+        
         void Run(Executable exe) {
-            var runner = SelectRunner(_cmd);
-            var results = runner.Run(exe);
+            var results = _runner.Run(exe);
             _reval.HandleRuntimeResults(results.ToArray());
-        }
-        
-        
-        private IRunner SelectRunner(CLI.Command cmd) {
-            switch (cmd) {
-                case CLI.TestCommand _:
-                case CLI.WatchCommand _:
-                case CLI.RunCommand _:
-                default: return new MainRunner();
-            }
         }
     }
 }
