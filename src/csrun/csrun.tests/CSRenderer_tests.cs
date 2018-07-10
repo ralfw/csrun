@@ -93,7 +93,7 @@ namespace csrun.tests
             Console.WriteLine($"{csSource}");
             
             Assert.AreEqual("main.cs", result.Filename);
-            Assert.AreEqual(36, result.Text.Length);            
+            Assert.AreEqual(42, result.Text.Length);            
             Assert.IsTrue(csSource.IndexOf("//#origin 1,main.csrun") > 0);
             Assert.IsTrue(csSource.IndexOf("//#endorigin") > 0);
             Assert.IsTrue(csSource.IndexOf("//#origin 20,main.csrun") > 0);

@@ -52,7 +52,7 @@ namespace csrun.domain.compiletime
 
             var originLabels = OriginLabels.Create(csrunSection.Filename, csrunSection.OriginLineNumber);
             return csBeforeSection.Concat(new[] {originLabels.startLabel})
-                               .Concat(csrunSection.Text)
+                               .Concat(Render_source())
                                .Concat(new[] {originLabels.endLabel})
                                .Concat(csAfterSection)
                                .ToArray();
@@ -65,6 +65,22 @@ namespace csrun.domain.compiletime
                     case Sourcecode.Sections.CSRunTest: return "#region test";
                     default: throw new InvalidOperationException($"Cannot render section type {csrunSection.Section}!");
                 }
+            }
+
+            string[] Render_source() {
+                switch (csrunSection.Section) {
+                    case Sourcecode.Sections.CSRunTest:
+                        return new[] {$"public void {Create_test_function_name(csrunSection.Label)}()" + "{"}
+                                    .Concat(csrunSection.Text)
+                                    .Concat(new[] { "}" })
+                                    .ToArray();
+                    default: return csrunSection.Text;
+                }
+            }
+
+            string Create_test_function_name(string label) {
+                label = label.Trim().Replace(" ", "_");
+                return $"@Test_{Guid.NewGuid().ToString().Replace("-", "")}@{label}";
             }
         }
     }
