@@ -8,12 +8,14 @@ namespace csrun.adapters.providers
     {
         private const int DUETIME_MS = 0;
         private const int INTERVAL_MS = 1000;
-        
+
+        private readonly Filesystem _fs;
         private readonly string _filename;
         private Timer _timer;
         private AutoResetEvent _are;
         
-        public Watcher(string filename) {
+        public Watcher(Filesystem fs, string filename) {
+            _fs = fs;
             _filename = filename;
         }
 
@@ -21,34 +23,22 @@ namespace csrun.adapters.providers
         public void Start(Action onChanged) {
             Console.WriteLine($"Started watching {_filename}...");
             
-            Run();
-            Poll(
-                Run);
-
-            
-            void Run() {
+            PollFileForChanges(() => {
                 onChanged();
                 Console.WriteLine($"\nAbort watch mode by pressing Ctrl-C");
-            }
+            });
         }
-
         
-        private void Poll(Action onChanged)
-        {
+        private void PollFileForChanges(Action onChanged) {
+            DateTime fileTimestamp = DateTime.MinValue;
             var busy = false;
-            var lastChanged = File.GetLastWriteTime(_filename);
             _timer = new Timer(_ => {
                 if (busy) return;
-                
-                var currentTimestamp = File.GetLastWriteTime(_filename);
-                if (currentTimestamp <= lastChanged) return;
-                
-                lastChanged = currentTimestamp;
-                busy = true;
-
-                onChanged();
-                
-                busy = false;
+                if (_fs.FileHasChanged(_filename, ref fileTimestamp)) {
+                    busy = true;
+                    onChanged();
+                    busy = false;
+                }
             }, null, DUETIME_MS, INTERVAL_MS);
             
             _are = new AutoResetEvent(false);

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using csrun.data.domain;
 
 namespace csrun.adapters.providers
@@ -19,6 +20,15 @@ namespace csrun.adapters.providers
             var templateFilepath = Path.Combine(exePath, RENDER_TEMPLATE_FILENAME);
 
             return File.ReadAllLines(templateFilepath);
+        }
+
+
+        public bool FileHasChanged(string filename, ref DateTime previousTimestamp) {
+            var currentTimestamp = File.GetLastWriteTime(filename);
+            if (currentTimestamp <= previousTimestamp) return false;
+                
+            previousTimestamp = currentTimestamp;
+            return true;
         }
     }
 }
