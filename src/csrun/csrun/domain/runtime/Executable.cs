@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace csrun.domain.runtime
 {
-    internal class Executable
+    internal class Executable : IDisposable
     {
         private readonly Assembly _assm;
 
@@ -38,6 +38,12 @@ namespace csrun.domain.runtime
             var mTest = tProg.GetMethod(testmethodnames);
             var oProg = Activator.CreateInstance(tProg);
             mTest.Invoke(oProg, new object[0]);
+        }
+
+        
+        public void Dispose()
+        {
+            
         }
     }
 }

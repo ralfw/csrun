@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using csrun.adapters.providers;
 using csrun.integration;
 using NUnit.Framework;
@@ -43,6 +44,30 @@ namespace csrun.tests
             var output = ConsoleOutput.Capture(() => sut.Execute());
 
             Console.WriteLine(output);
+        }
+        
+        
+        
+        [Test]
+        public void Change_source_and_reexecute()
+        {
+            const string CSRUN_FILENAME = "test.csrun";
+            
+            var source1 = "Console.WriteLine(\"123\");";
+            var source2 = "Console.WriteLine(\"987\");";
+            
+            var fs = new Filesystem();
+            var fl = new FailureLog();
+            var cmd = new CLI.RunCommand(CSRUN_FILENAME);
+            var sut = new App(fs, fl, cmd);
+            
+            File.WriteAllText(CSRUN_FILENAME, source1);
+            var output = ConsoleOutput.Capture(() => sut.Execute());
+            Assert.AreEqual("123", output.Trim());
+            
+            File.WriteAllText(CSRUN_FILENAME, source2);
+            output = ConsoleOutput.Capture(() => sut.Execute());
+            Assert.AreEqual("987", output.Trim());
         }
     }
 }
