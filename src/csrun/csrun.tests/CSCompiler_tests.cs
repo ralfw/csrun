@@ -25,7 +25,7 @@ namespace csrun.tests
         {
             var csSource = new Sourcecode
             {
-                Filename = "program.cs",
+                Filename = "program_no_errors.cs",
                 Text = @"using System;
 public class Program {
   public static void Main(string[] args) {
@@ -61,7 +61,7 @@ Console.WriteLine(answer);
         {
             var csSource = new Sourcecode
             {
-                Filename = "program.cs",
+                Filename = "program_with_errors.cs",
                 Text = @"using System
 public class Program {
   public static void Main(string[] args) {
