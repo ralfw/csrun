@@ -27,23 +27,24 @@ Console.WriteLine(answer);
     #endregion
   }
 
-[Test]
+[Test(Description='Test 1!')]
 public void Test1() {}
 
 public void Dump() {}
 
-[Test]
+[Test()]
 public void Test2() {}
 }
-".Split('\n')
+".Replace("'", "\"").Split('\n')
             };
 
-            string[] result = null;
+            (string name,string label)[] result = null;
             CSCompiler.Compile(csSource,
-                exe => result = exe.Testmethodnames.ToArray(),
+                exe => result = exe.Testmethods.ToArray(),
                 null);
             
-            Assert.AreEqual(new[]{"Test1", "Test2"}, result);
+            Assert.AreEqual(new[]{"Test1", "Test2"}, result.Select(r => r.name));
+            Assert.AreEqual(new[]{"Test 1!", "[no name]"}, result.Select(r => r.label));
         }
         
         

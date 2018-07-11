@@ -67,16 +67,19 @@ namespace csrun.domain.compiletime
                 }
             }
 
+            
             string[] Render_source() {
                 switch (csrunSection.Section) {
                     case Sourcecode.Sections.CSRunTest:
-                        var fn = new TestMethodName(csrunSection.Label);
-                        return new[] {$"[NUnit.Framework.Test]public void {fn.Value}()" + "{"}
+                        return new[] {$"[NUnit.Framework.Test(Description=\"{csrunSection.Label}\")]public void {CreateTestMethodName()}()" + "{"}
                                     .Concat(csrunSection.Text)
                                     .Concat(new[] { "}" })
                                     .ToArray();
                     default: return csrunSection.Text;
                 }
+
+                
+                string CreateTestMethodName() => $"Test{Guid.NewGuid().ToString().Replace("-", "")}";
             }
         }
     }

@@ -20,14 +20,16 @@ namespace csrun.domain.runtime
         }
 
 
-        public IEnumerable<string> Testmethodnames
+        public IEnumerable<(string name, string label)> Testmethods
         {
             get {
                 var tProg = _assm.GetType("Program");
                 var methods = tProg.GetMethods();
                 foreach (var m in methods) {
-                    if (m.GetCustomAttribute<NUnit.Framework.TestAttribute>() != null)
-                        yield return m.Name;
+                    var testAttr = m.GetCustomAttribute<NUnit.Framework.TestAttribute>();
+                    if (testAttr != null) {
+                        yield return (m.Name, testAttr.Description ?? "[no name]");
+                    }
                 }
             }
         }

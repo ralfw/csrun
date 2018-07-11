@@ -9,14 +9,13 @@ namespace csrun.domain.runtime.runners
         public IEnumerable<RuntimeResult> Run(Executable exe)
         {
             var results = new List<TestResult>();
-            foreach (var name in exe.Testmethodnames) {
-                var label = TestMethodName.ExtractLabel(name);
+            foreach (var method in exe.Testmethods) {
                 try {
-                    exe.Test(name);
-                    results.Add(new TestSuccess(label));
+                    exe.Test(method.name);
+                    results.Add(new TestSuccess(method.label));
                 }
                 catch (Exception ex) {
-                    results.Add(new TestFailure(label, ex));
+                    results.Add(new TestFailure(method.label, ex));
                 }
             }
             return results;

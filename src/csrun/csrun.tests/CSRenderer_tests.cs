@@ -10,8 +10,9 @@ namespace csrun.tests
     [TestFixture]
     public class CSRenderer_tests
     {
+        // Watch the console output of the test!
         [Test]
-        public void Render_main_functions_tests()
+        public void Render_main_with_functions_and_tests()
         {
             var sections = new[]
             {
