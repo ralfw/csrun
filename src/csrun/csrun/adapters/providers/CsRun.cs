@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace csrun.adapters.providers
 {
@@ -14,10 +15,13 @@ namespace csrun.adapters.providers
             p.WaitForExit();
 
 
-            ProcessStartInfo Create_process_info()
-                => IsRunningOnMono() ? new ProcessStartInfo("mono", $"csrun.exe test -f \"{csrunFilename}\"") 
-                                     : new ProcessStartInfo("csrun.exe", $"-f \"{csrunFilename}\"");
-            
+            ProcessStartInfo Create_process_info() {
+                var exeFilepath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                return IsRunningOnMono()
+                    ? new ProcessStartInfo("mono", $"\"{exeFilepath}\" test -f \"{csrunFilename}\"")
+                    : new ProcessStartInfo(exeFilepath, $"test -f \"{csrunFilename}\"");
+            }
+
             bool IsRunningOnMono() => (Type.GetType("Mono.Runtime") != null);
         }
     }
