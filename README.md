@@ -77,7 +77,7 @@ Console.WriteLine($"{number} squared equals {square}");
 ### #functions Section
 After writing statements, calling functions, and using objects "as is" students are ready for the next level: composing their own functions.
 
-That can be done in the `#functions` section of a `.csrun` file:
+That can be done in the `#functions` sections of a `.csrun` file:
 
 ```
 Console.Write("Enter number to square: ");
@@ -90,7 +90,7 @@ Console.WriteLine($"{number} squared equals {Square(number)}");
 int Square(int a) => a*a;
 ```
 
-Any function definitions just have to be done after the section heading `#functions`.
+Any function definitions just have to be done after a section heading `#functions`.
 
 *csrun* is for real beginners. Of them I don't expect to define a lot of types of their own. Functions, though, is a different matter. They are the first thing you need if you want to write programs beyond the trivial. That's why the section is titled `#function`.
 

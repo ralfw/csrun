@@ -21,13 +21,15 @@ namespace csrun.tests
                     "#functions",
                     "f 1",
                     "f 2",
-                    "f 3"
+                    "f 3",
+                    "#functions",
+                    "f 4"
                 }
             };
 
             var result = Dissection.Dissect(csrunSource).ToArray();
 
-            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual(3, result.Length);
             
             Assert.AreEqual(Sourcecode.Sections.CSRunMain, result[0].Section);
             Assert.AreEqual(new[]{"main 1", "main 2"}, result[0].Text);
@@ -36,6 +38,10 @@ namespace csrun.tests
             Assert.AreEqual(Sourcecode.Sections.CSRunFunctions, result[1].Section);
             Assert.AreEqual(new[]{"f 1", "f 2", "f 3"}, result[1].Text);
             Assert.AreEqual(4, result[1].OriginLineNumber);
+            
+            Assert.AreEqual(Sourcecode.Sections.CSRunFunctions, result[2].Section);
+            Assert.AreEqual(new[]{"f 4"}, result[2].Text);
+            Assert.AreEqual(8, result[2].OriginLineNumber);
         }
         
         
@@ -105,7 +111,10 @@ t2.2
 #test
 t3.1
 t3.2
-t3.3".Split('\n')
+t3.3
+#functions
+f3
+f4".Split('\n')
             };
 
             var result = Dissection.Dissect(csrunSource).ToArray();
@@ -137,7 +146,11 @@ t3.3".Split('\n')
             Assert.AreEqual(new[]{"t3.1","t3.2","t3.3"}, result[4].Text);
             Assert.AreEqual(13, result[4].OriginLineNumber);
             
-            Assert.AreEqual(5, result.Length);
+            Assert.AreEqual(Sourcecode.Sections.CSRunFunctions, result[5].Section);
+            Assert.AreEqual(new[]{"f3","f4"}, result[5].Text);
+            Assert.AreEqual(17, result[5].OriginLineNumber);
+            
+            Assert.AreEqual(6, result.Length);
         }
         
     }

@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
-using System.Text;
 using csrun.data.domain;
 
 namespace csrun.domain.compiletime
@@ -21,111 +18,54 @@ namespace csrun.domain.compiletime
     {
         public static IEnumerable<Sourcecode> Dissect(Sourcecode csrunSource)
         {
-            var mainSource = Extract_main_section(csrunSource.Filename, csrunSource.Text);
-            var functionsSource = Extract_functions_section(csrunSource.Filename, csrunSource.Text);
-            var testSources = Extract_test_sections(csrunSource.Filename, csrunSource.Text);
-
-            if (IsNotEmpty(mainSource)) yield return mainSource;
-            if (IsNotEmpty(functionsSource)) yield return functionsSource;
-            foreach (var ts in testSources) yield return ts;
-
-
-            bool IsNotEmpty(Sourcecode source) => source.Text.Length > 0;
-        }
-
-
-        static Sourcecode Extract_main_section(string filename, string[] text) {
-            var (mainText, fromLineNumber) = Extract_main_source_text(text);
-            
-            return new Sourcecode {
-                Section = Sourcecode.Sections.CSRunMain,
-                Filename = filename,
-                OriginLineNumber = fromLineNumber,
-                Text = mainText,
-            };
-        }
-
-        static (string[] text, int fromLineNumber) Extract_main_source_text(string[] text) {
-            return (text.TakeWhile(l => !l.Trim().StartsWith("#functions") && !l.Trim().StartsWith("#test")).ToArray(), 
-                    1);
-        }
-
-
-        static Sourcecode Extract_functions_section(string filename, string[] text) {
-            var (functionsText, fromLineNumber) = Extract_functions_source_text(text);
-            
-            return new Sourcecode {
-                Section = Sourcecode.Sections.CSRunFunctions,
-                Filename = filename,
-                OriginLineNumber = fromLineNumber,
-                Text = functionsText
-            };
-        }
-
-        static (string[] text, int fromLineNumber) Extract_functions_source_text(string[] text) {
-            var lines = new List<string>();
-            var fromLineNumber = 0;
-            var currLineNumber = 0;
-            
-            var inFunctions = false;
-            foreach (var l in text) {
-                currLineNumber++;
-                if (l.Trim().StartsWith("#functions")) {
-                    inFunctions = true;
-                    fromLineNumber = currLineNumber + 1;
-                }
-                else if (l.Trim().StartsWith("#test"))
-                    break;
-                else if (inFunctions)
-                    lines.Add(l);
-            }
-            
-            return (lines.ToArray(), fromLineNumber);
-        }
-        
-        
-        static IEnumerable<Sourcecode> Extract_test_sections(string filename, string[] text) {
             var sections = new List<Sourcecode>();
-            var header = "";
-            var body = new List<string>();
-            var fromLineNumber = 0;
-            var currLineNumber = 0;
-            
-            var inTest = false;
-            foreach (var l in text) {
-                currLineNumber++;
-                if (l.Trim().StartsWith("#test")) {
-                    BuildSection();
-                    header = l.Trim();
-                    fromLineNumber = currLineNumber + 1;
-                    inTest = true;
+            var currentSectionText = new List<string>();
+            var currentSection = OpenSection(Sourcecode.Sections.CSRunMain, 1);
+            var lineNumber = 0;
+            foreach (var line in csrunSource.Text) {
+                lineNumber++;
+                switch (Line_classification(line)) {
+                    case Sourcecode.Sections.CSRunFunctions:
+                        FlushSection();
+                        currentSection = OpenSection(Sourcecode.Sections.CSRunFunctions, lineNumber + 1);
+                        break;
+                    case Sourcecode.Sections.CSRunTest:
+                        FlushSection();
+                        currentSection = OpenSection(Sourcecode.Sections.CSRunTest, lineNumber + 1);
+                        currentSection.Label = line.Trim().Substring("#test".Length).Trim();
+                        break;
+                    default:
+                        currentSectionText.Add(line);
+                        break;
                 }
-                else if (l.Trim().StartsWith("#functions")) {
-                    BuildSection();
-                    inTest = false;
-                }
-                else if (inTest)
-                    body.Add(l);
             }
-            BuildSection();
+            FlushSection();
             return sections;
 
 
-            void BuildSection() {
-                if (body.Count == 0) return;
+            Sourcecode.Sections Line_classification(string text) {
+                if (text.Trim().StartsWith("#functions"))
+                    return Sourcecode.Sections.CSRunFunctions;
+                if (text.Trim().StartsWith("#test"))
+                    return Sourcecode.Sections.CSRunTest;
+                return Sourcecode.Sections.CSRunRaw;
+            }
 
-                var testLabel = header.Substring("#test".Length).Trim();
-                
-                var csrunSource = new Sourcecode {
-                    Section = Sourcecode.Sections.CSRunTest,
-                    Filename = filename,
-                    Label = testLabel,
-                    OriginLineNumber = fromLineNumber,
-                    Text = body.ToArray()
+            Sourcecode OpenSection(Sourcecode.Sections sectionType, int originLineNumber) {
+                return new Sourcecode {
+                    Section = sectionType,
+                    Filename = csrunSource.Filename,
+                    OriginLineNumber = originLineNumber
                 };
-                body.Clear();
+            }
+
+            void FlushSection() {
+                if (!currentSectionText.Any()) return;
+                currentSection.Text = currentSectionText.ToArray();
+                sections.Add(currentSection);
                 
-                sections.Add(csrunSource);
+                currentSectionText.Clear();
+                currentSection = null;
             }
         }
     }
