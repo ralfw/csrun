@@ -10,7 +10,7 @@ namespace csrun.data.domain
             this.Value = $"Test{Guid.NewGuid().ToString().Replace("-", "")}__{label}";
 
             char DefuseInvalidChars(char c)
-                => "@abcdefghijklmnopqrstuvwxyzäöüß".IndexOf(char.ToLower(c)) >= 0 ? c : '_';
+                => "@abcdefghijklmnopqrstuvwxyzäöüß0123456789êâûôéèáàúùóò".IndexOf(char.ToLower(c)) >= 0 ? c : '_';
         }
         
         public string Value { get; }
