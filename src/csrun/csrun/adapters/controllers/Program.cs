@@ -20,7 +20,7 @@ namespace csrun.adapters.controllers
             var cmd = CLI.Parse(args);
             
             var fs = new Filesystem();
-            var ui = new FailureLog();
+            var ui = new ResultLog();
             var app = new App(fs, ui, cmd);
             
             app.Execute();

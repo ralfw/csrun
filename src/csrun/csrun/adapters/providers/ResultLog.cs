@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace csrun.adapters.providers
 {
-    internal class FailureLog
+    internal class ResultLog
     {
         public void DisplayCompilerErrors(string[] errors) {
             Console.WriteLine("\n*** Compiler Errors ***");
@@ -20,11 +20,11 @@ namespace csrun.adapters.providers
         
         public void DisplayTestFailure(string label, string failure) {
             Console.WriteLine($"\n*** Failed Test '{label}' ***");
-            Console.WriteLine(failure);
+            Console.WriteLine(failure.Trim());
         }
 
         public void DisplayTestResults((bool success, string label)[] results) {
-            Console.WriteLine($"*** Overall Test Results {DateTime.Now} ***");
+            Console.WriteLine($"\n*** Overall Test Results {DateTime.Now} ***");
             var succeeded = results.Count(r => r.success);
             
             var currColor = Console.BackgroundColor;

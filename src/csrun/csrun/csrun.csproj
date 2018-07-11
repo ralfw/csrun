@@ -44,7 +44,7 @@
     <Compile Include="adapters\controllers\Program.cs" />
     <Compile Include="adapters\providers\CLI.cs" />
     <Compile Include="adapters\providers\CsRun.cs" />
-    <Compile Include="adapters\providers\FailureLog.cs" />
+    <Compile Include="adapters\providers\ResultLog.cs" />
     <Compile Include="adapters\providers\Filesystem.cs" />
     <Compile Include="adapters\providers\Watcher.cs" />
     <Compile Include="data\domain\CompilerError.cs" />

@@ -10,13 +10,13 @@ namespace csrun.integration
     internal class App
     {
         private readonly Filesystem _fs;
-        private readonly FailureLog _failureLog;
+        private readonly ResultLog _resultLog;
         private readonly CLI.Command _cmd;
         private ResultEvaluation _reval;
 
-        public App(Filesystem fs, FailureLog failureLog, CLI.Command cmd) {
+        public App(Filesystem fs, ResultLog resultLog, CLI.Command cmd) {
             _fs = fs;
-            _failureLog = failureLog;
+            _resultLog = resultLog;
             _cmd = cmd;
         }
 
@@ -39,7 +39,7 @@ namespace csrun.integration
         
         private void ExecuteOnce() {
             var csSource = Transpile(_cmd.SourceFilename);
-            _reval = new ResultEvaluation(csSource, _failureLog);
+            _reval = new ResultEvaluation(csSource, _resultLog);
             CSCompiler.Compile(csSource,
                 Run,
                 _reval.HandleCompilerErrors

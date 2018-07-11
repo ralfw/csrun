@@ -10,9 +10,9 @@ namespace csrun.integration
     internal class ResultEvaluation
     {
         private readonly Sourcecode _csSource;
-        private readonly FailureLog _log;
+        private readonly ResultLog _log;
 
-        public ResultEvaluation(Sourcecode csSource, FailureLog log) {
+        public ResultEvaluation(Sourcecode csSource, ResultLog log) {
             _csSource = csSource;
             _log = log;
         }
