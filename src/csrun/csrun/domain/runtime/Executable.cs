@@ -5,14 +5,13 @@ using System.Reflection;
 
 namespace csrun.domain.runtime
 {
-    internal class Executable : IDisposable
+    internal class Executable
     {
         private readonly Assembly _assm;
 
-        public Executable(Assembly assm) {
-            _assm = assm;
-        }
+        public Executable(Assembly assm) { _assm = assm; }
 
+        
         public void Main() {
             var tProg = _assm.GetType("Program");
             var mMain = tProg.GetMethod("Main");
@@ -20,8 +19,7 @@ namespace csrun.domain.runtime
         }
 
 
-        public IEnumerable<(string name, string label)> Testmethods
-        {
+        public IEnumerable<(string name, string label)> Testmethods {
             get {
                 var tProg = _assm.GetType("Program");
                 var methods = tProg.GetMethods();
@@ -40,12 +38,6 @@ namespace csrun.domain.runtime
             var mTest = tProg.GetMethod(testmethodnames);
             var oProg = Activator.CreateInstance(tProg);
             mTest.Invoke(oProg, new object[0]);
-        }
-
-        
-        public void Dispose()
-        {
-            
         }
     }
 }

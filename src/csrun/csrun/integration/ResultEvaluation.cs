@@ -25,14 +25,21 @@ namespace csrun.integration
         
         
         public void HandleRuntimeResults(RuntimeResult[] results) {
-            if (!results.Any()) return;
-            if (results.First() is RuntimeSuccess) return;
+            if (NoNeedToHandleResults()) return;
 
             HandleException(results);
             HandleTestFailures(results);
             HandleTestResults(results);
+
+
+            bool NoNeedToHandleResults() {
+                if (!results.Any()) return true;
+                if (results.First() is RuntimeSuccess) return true;
+                return false;
+            }
         }
 
+        
         void HandleException(RuntimeResult[] results) {
             var runtimeExceptions = results.OfType<RuntimeException>().ToArray();
             if (!runtimeExceptions.Any()) return;
@@ -51,14 +58,16 @@ namespace csrun.integration
             }
         }
         
-        void HandleTestResults(RuntimeResult[] results)
-        {
-            var testResults = results.OfType<TestResult>()
-                                     .Select(r => ((bool success, string label))(r is TestSuccess, r.Label))
-                                     .ToArray();
+        void HandleTestResults(RuntimeResult[] results) {
+            var testResults = CollectTestResults();
             if (!testResults.Any()) return;
-
             _log.DisplayTestResults(testResults);
+
+            
+            (bool, string)[] CollectTestResults()
+                => results.OfType<TestResult>()
+                          .Select(r => ((bool success, string label))(r is TestSuccess, r.Label))
+                          .ToArray();
         }
     }
 }

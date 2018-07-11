@@ -36,8 +36,7 @@ namespace csrun.adapters.providers
         }
 
 
-        public class Command
-        {
+        public class Command {
             protected Command(string sourceFilename) {
                 if (Path.GetExtension(sourceFilename)?.ToLower() != ".csrun") 
                     throw new ApplicationException($"Source filename has invalid extension '{Path.GetExtension(sourceFilename)}'! '.csrun' required!");

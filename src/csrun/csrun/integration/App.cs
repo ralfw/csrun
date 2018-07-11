@@ -41,8 +41,8 @@ namespace csrun.integration
             var csSource = Transpile(_cmd.SourceFilename);
             _reval = new ResultEvaluation(csSource, _resultLog);
             CSCompiler.Compile(csSource,
-                Run,
-                _reval.HandleCompilerErrors
+                onSuccess: Run,
+                onFailure: _reval.HandleCompilerErrors
             );
         }
 
