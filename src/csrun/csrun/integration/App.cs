@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using csrun.adapters.providers;
 using csrun.data.domain;
 using csrun.domain.compiletime;
@@ -14,38 +13,27 @@ namespace csrun.integration
         private readonly FailureLog _failureLog;
         private readonly CLI.Command _cmd;
         private ResultEvaluation _reval;
-        private readonly IRunner _runner;
 
         public App(Filesystem fs, FailureLog failureLog, CLI.Command cmd) {
             _fs = fs;
             _failureLog = failureLog;
             _cmd = cmd;
-            _runner = SelectRunner();
-            
-            
-            IRunner SelectRunner() {
-                switch (cmd) {
-                    case CLI.TestCommand _:
-                    case CLI.WatchCommand _:
-                        return new TestRunner();
-                    default: return new MainRunner();
-                }
-            }
         }
 
 
         public void Execute() {
-            switch (_cmd) {
-                case CLI.RunCommand _:
-                case CLI.TestCommand _:
-                    ExecuteOnce();
-                    break;
-                case CLI.WatchCommand _:
-                    var watcher = new Watcher(_cmd.SourceFilename);
-                    watcher.Start(
-                        ExecuteOnce);
-                    break;
-            }
+            if (_cmd is CLI.WatchCommand)
+                ExecuteOnChange();
+            else
+                ExecuteOnce();
+        }
+
+
+        private void ExecuteOnChange() {
+            var watcher = new Watcher(_cmd.SourceFilename);
+            watcher.Start(
+                () => CsRun.Run(_cmd.SourceFilename)
+            );
         }
         
         
@@ -68,8 +56,18 @@ namespace csrun.integration
 
         
         void Run(Executable exe) {
-            var results = _runner.Run(exe);
+            var results = SelectRunner().Run(exe);
             _reval.HandleRuntimeResults(results.ToArray());
+            
+            
+            IRunner SelectRunner() {
+                switch (_cmd) {
+                    case CLI.TestCommand _:
+                    case CLI.WatchCommand _:
+                        return new TestRunner();
+                    default: return new MainRunner();
+                }
+            }
         }
     }
 }
