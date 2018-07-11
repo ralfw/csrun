@@ -15,7 +15,7 @@ namespace csrun.tests
         {
             var csSource = new Sourcecode
             {
-                Filename = "program.cs",
+                Filename = "program_collecttestmethodnames.cs",
                 Text = @"using System;
 using NUnit.Framework;
 
@@ -48,11 +48,11 @@ public void Test2() {}
         
         
         [Test]
-        public void Execute_testmethod()
+        public void Execute_calltestmethod()
         {
             var csSource = new Sourcecode
             {
-                Filename = "program.cs",
+                Filename = "program_calltestmethod.cs",
                 Text = @"using System;
 using NUnit.Framework;
 
