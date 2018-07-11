@@ -9,8 +9,7 @@ namespace csrun.domain.runtime.runners
         public IEnumerable<RuntimeResult> Run(Executable exe)
         {
             var results = new List<TestResult>();
-            foreach (var name in exe.Testmethodnames)
-            {
+            foreach (var name in exe.Testmethodnames) {
                 var label = TestMethodName.ExtractLabel(name);
                 try {
                     exe.Test(name);

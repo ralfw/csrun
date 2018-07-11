@@ -19,8 +19,11 @@ namespace csrun.adapters.providers
 
         
         public void Start(Action onChanged) {
-            Console.WriteLine($"Started watching {_filename}...\nAbort by pressing Ctrl-C");
+            Console.WriteLine($"Started watching {_filename}...");
+            
             onChanged();
+            
+            Console.WriteLine($"\nAbort watch mode by pressing Ctrl-C");
 
             var busy = false;
             var lastChanged = File.GetLastWriteTime(_filename);

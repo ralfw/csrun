@@ -7,8 +7,8 @@ namespace csrun.adapters.providers
     {
         public Sourcecode ReadSource(string filename) {
             return new Sourcecode {
-                Text = File.ReadAllLines(filename),
-                Filename = filename
+                Filename = filename,
+                Text = File.ReadAllLines(filename)
             };
         }
 

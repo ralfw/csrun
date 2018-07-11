@@ -24,7 +24,7 @@ namespace csrun.adapters.providers
         }
 
         public void DisplayTestResults((bool success, string label)[] results) {
-            Console.WriteLine("*** Overall Test Results ***");
+            Console.WriteLine($"*** Overall Test Results {DateTime.Now} ***");
             var succeeded = results.Count(r => r.success);
             
             var currColor = Console.BackgroundColor;

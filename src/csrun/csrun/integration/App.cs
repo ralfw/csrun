@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using csrun.adapters.providers;
 using csrun.data.domain;
 using csrun.domain.compiletime;
@@ -20,6 +21,7 @@ namespace csrun.integration
             _failureLog = failureLog;
             _cmd = cmd;
             _runner = SelectRunner();
+            
             
             IRunner SelectRunner() {
                 switch (cmd) {
