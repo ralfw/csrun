@@ -134,7 +134,7 @@ class MyStack<T> {
 Before unleashing Visual Studio or the like on the student she can achieve quite some proficiency in using *just the language*. Nothing more than a simple text editor and *csrun* are needed.
 
 ### #test Section
-But what would initial programming education be today without automatic testing? My belief is that automatic testing should be taught almost from day 1 on. At lasted it should be introduced as soon as students know how to write their own functions.
+But what would initial programming education be today without automated testing? My belief is that automated testing should be taught almost from day 1 on. At lasted it should be introduced as soon as students know how to write their own functions.
 
 But doing automated testing in an IDE is not that easy. Tests need to be specifically devised and run with a their own tool. Visual Studio and Rider make that easy for the pro - but for the novice it's hidden behind a lot of feature fog.
 
