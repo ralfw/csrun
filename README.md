@@ -1,4 +1,4 @@
-# csrun - A Simple Console Runner for C#
+# csrun - A Simple Console Runner for Csharp
 
 There are a lot of REPL tools for running C# interactively. You might even be able to do that right in your IDE, e.h. JetBrains Rider.
 
@@ -32,6 +32,18 @@ and will produce the output expected.
 * main
 * functions
 * tests
+
+Which are represented like this in a `.csrun` file:
+
+```
+... // main statements
+#functions
+... // function definitions
+#test some test
+... // test statements
+#test another test
+... // test statements
+```
 
 ### Main Section
 The main section starts at the beginning of a `.csrun` file and extends until another section begins.
@@ -165,6 +177,7 @@ Like with the main section tests consist only of statements. Think of each test 
 Please note: *csrun* uses [NUnit](https://github.com/nunit/docs). All standard NUnit `Assert` functions can be used.
 
 ## Running `.csrun` Code
+### Running Code in Main Section
 The simplest way to run `.csrun` code is to start `csrun.exe` with a `.csrun` filename:
 
 `csrun.exe stack.csrun`
@@ -197,5 +210,20 @@ Fortunately *csrun* is here to help! When started in watch mode it will run all 
 
 Running tests thus is just one keystroke away: pressing `Ctrl-S` (or `Cmd-S`) to save the source code file.
 
+Here you see a text editor side-by-side with a watching *csrun*:
 
+![](doc/images/testing3.png)
+
+Initially the implementation was buggy (red test). But after correcting and saving it the tests immediately became all green.
+
+## Installation
+When you run the `deploy.sh` script (after building the solution) in the `pipeline/` directory a folder `deploy` is created.
+
+It contains `example.csrun` and a subfolder `.csrun`. That's where the binaries are copied to. I think they should not contaminate the source directory. Too much noise, again.
+
+The way to use *csrun* thus is:
+
+1. Copy the contents of the `deploy` directory to the student's computer (on which .NET/Mono needs to be installed), e.g. create a directory named `learncsharp`.
+2. Open a terminal window on `learncsharp`.
+3. Run the example like so: `.csrun/csrun.exe example.csrun` (on Mono add `mono` in front of the call)
 
