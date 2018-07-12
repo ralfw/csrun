@@ -6,10 +6,17 @@ namespace csrun.adapters.providers
     internal class BlockingTimer : IDisposable
     {
         private const int DUETIME_MS = 0;
-        private const int INTERVAL_MS = 1000;
-        
+        private const int DEFAULT_INTERVAL_MS = 500;
+
+        private int _intervalMs;
         private Timer _timer;
         private AutoResetEvent _are;
+
+
+        public BlockingTimer() : this(DEFAULT_INTERVAL_MS) {}
+        internal BlockingTimer(int intervalMs) {
+            _intervalMs = intervalMs;
+        }
         
         
         public void Start(Action onTick) {
@@ -21,7 +28,7 @@ namespace csrun.adapters.providers
                 onTick();
                 
                 busy = false;
-            }, null, DUETIME_MS, INTERVAL_MS);
+            }, null, DUETIME_MS, _intervalMs);
             _are = new AutoResetEvent(false);
         }
 
@@ -29,7 +36,7 @@ namespace csrun.adapters.providers
         public void Wait() => _are?.WaitOne();
 
 
-        private void Stop() {
+        public void Stop() {
             _timer?.Change(Timeout.Infinite, Timeout.Infinite);
             _are?.Set();
         }
