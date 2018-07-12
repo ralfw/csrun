@@ -217,13 +217,14 @@ Here you see a text editor side-by-side with a watching *csrun*:
 Initially the implementation was buggy (red test). But after correcting and saving it the tests immediately became all green.
 
 ## Installation
-When you run the `deploy.sh` script (after building the solution) in the `pipeline/` directory a folder `deploy` is created.
+Download the current release version of *csrun* from the repository's [releases page](https://github.com/ralfw/csrun/releases). It is delivered as a `.zip` file.
 
-It contains `example.csrun` and a subfolder `.csrun`. That's where the binaries are copied to. I think they should not contaminate the source directory. Too much noise, again.
+When you unpack the file a directory named `csrun` is created. Rename it to your needs or copy the contents where you need them.
 
-The way to use *csrun* thus is:
+It contains a sample `.csrun` file and a subfolder `.csrun`. That's where the binaries are kept. I think they should not contaminate the working directory. Too much noise, again.
 
-1. Copy the contents of the `deploy` directory to the student's computer (on which .NET/Mono needs to be installed), e.g. create a directory named `learncsharp`.
-2. Open a terminal window on `learncsharp`.
-3. Run the example like so: `.csrun/csrun.exe example.csrun` (on Mono add `mono` in front of the call)
+To run the sample file from its directory open a terminal window and do this:
 
+`.csrun/csrun.exe example.csrun`
+
+(Or add `mono` in front of it, if you're using Mono instead of the .NET Framework.)
