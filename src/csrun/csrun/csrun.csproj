@@ -42,11 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="adapters\controllers\Program.cs" />
+    <Compile Include="adapters\providers\BlockingTimer.cs" />
     <Compile Include="adapters\providers\CLI.cs" />
     <Compile Include="adapters\providers\CsRun.cs" />
     <Compile Include="adapters\providers\ResultLog.cs" />
     <Compile Include="adapters\providers\Filesystem.cs" />
-    <Compile Include="adapters\providers\Watcher.cs" />
     <Compile Include="data\domain\CompilerError.cs" />
     <Compile Include="data\domain\OriginLabels.cs" />
     <Compile Include="data\domain\RuntimeResults.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="domain\runtime\runners\TestRunner.cs" />
     <Compile Include="integration\App.cs" />
     <Compile Include="integration\ResultEvaluation.cs" />
+    <Compile Include="integration\SourceObservation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="template.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

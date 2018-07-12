@@ -30,8 +30,9 @@ namespace csrun.integration
 
 
         private void ExecuteOnChange() {
-            var watcher = new Watcher(_fs, _cmd.SourceFilename);
-            watcher.Start(
+            var timer = new BlockingTimer();
+            var observer = new SourceObservation(_fs, timer);
+            observer.WatchForChange(_cmd.SourceFilename,
                 () => CsRun.Run(_cmd.SourceFilename)
             );
         }
