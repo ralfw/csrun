@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using csrun.data.domain;
+using NUnit.Framework;
 
 namespace csrun.domain.runtime.runners
 {
@@ -10,12 +11,17 @@ namespace csrun.domain.runtime.runners
         {
             var results = new List<TestResult>();
             foreach (var method in exe.Testmethods) {
-                try {
-                    exe.Test(method.name);
-                    results.Add(new TestSuccess(method.label));
-                }
-                catch (Exception ex) {
-                    results.Add(new TestFailure(method.label, ex));
+                using (new NUnit.Framework.Internal.TestExecutionContext.IsolatedContext()) {
+                    // Creating a TestExecutionContext isolates the results of the asserts in one test
+                    // from those in another tests. Otherwise NUnit accumulates them and carries
+                    // results over to the next Assert call.
+                    try {
+                        exe.Test(method.name);
+                        results.Add(new TestSuccess(method.label));
+                    }
+                    catch (Exception ex) {
+                        results.Add(new TestFailure(method.label, ex));
+                    }
                 }
             }
             return results;

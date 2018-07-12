@@ -51,6 +51,7 @@
     <Compile Include="FailureMapper_tests.cs" />
     <Compile Include="Filesystem_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spikes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="test_tests.csrun">

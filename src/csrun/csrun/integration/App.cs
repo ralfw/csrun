@@ -10,11 +10,11 @@ namespace csrun.integration
     internal class App
     {
         private readonly Filesystem _fs;
-        private readonly ResultLog _resultLog;
+        private readonly IResultLog _resultLog;
         private readonly CLI.Command _cmd;
         private ResultEvaluation _reval;
 
-        public App(Filesystem fs, ResultLog resultLog, CLI.Command cmd) {
+        public App(Filesystem fs, IResultLog resultLog, CLI.Command cmd) {
             _fs = fs;
             _resultLog = resultLog;
             _cmd = cmd;

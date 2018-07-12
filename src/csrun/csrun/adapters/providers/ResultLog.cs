@@ -5,7 +5,15 @@ using System.Linq;
 
 namespace csrun.adapters.providers
 {
-    internal class ResultLog
+    internal interface IResultLog {
+        void DisplayCompilerErrors(string[] errors);
+        void DisplayRuntimeFailure(string failure);
+        void DisplayTestFailure(string label, string failure);
+        void DisplayTestResults((bool success, string label)[] results);
+    }
+
+    
+    internal class ResultLog : IResultLog
     {
         public void DisplayCompilerErrors(string[] errors) {
             Console.WriteLine("\n*** Compiler Errors ***");
