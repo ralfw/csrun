@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csrun", "csrun\csrun.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csrun.tests", "csrun.tests\csrun.tests.csproj", "{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testparent", "testparent\testparent.csproj", "{82372FD2-83C0-42BF-844D-5EB4BBF0B30A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testchild", "testchild\testchild.csproj", "{1A860195-DDCE-467E-A095-B3F74DE7B97E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57CEFD00-A03B-4C35-BBA5-ADAFBD05C405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82372FD2-83C0-42BF-844D-5EB4BBF0B30A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82372FD2-83C0-42BF-844D-5EB4BBF0B30A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82372FD2-83C0-42BF-844D-5EB4BBF0B30A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82372FD2-83C0-42BF-844D-5EB4BBF0B30A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A860195-DDCE-467E-A095-B3F74DE7B97E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A860195-DDCE-467E-A095-B3F74DE7B97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A860195-DDCE-467E-A095-B3F74DE7B97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A860195-DDCE-467E-A095-B3F74DE7B97E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
