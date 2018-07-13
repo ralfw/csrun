@@ -9,7 +9,7 @@ namespace csrun.adapters.providers
         public static void Run(string csrunFilename) {
             var pi = Create_process_info();
             pi.CreateNoWindow = true;
-            pi.UseShellExecute = true;
+            pi.UseShellExecute = false;
 
             var p = Process.Start(pi);
             p.WaitForExit();
