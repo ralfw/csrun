@@ -24,14 +24,33 @@ namespace csrun.adapters.providers
                     .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true),
                 new Route("watch")
                     .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true));
-            var cfg = new AppCfgCompiler(schema)
-                            .Compile(args);
 
-            switch (cfg._RoutePath) {
-                case "run": return new RunCommand(cfg.sourceFilename);
-                case "test": return new TestCommand(cfg.sourceFilename);
-                case "watch": return new WatchCommand(cfg.sourceFilename);
-                default: throw new ApplicationException($"Unknown command: '{cfg._RoutePath}'!");
+            try
+            {
+                var cfg = new AppCfgCompiler(schema)
+                    .Compile(args);
+
+                switch (cfg._RoutePath)
+                {
+                    case "run": return new RunCommand(cfg.sourceFilename);
+                    case "test": return new TestCommand(cfg.sourceFilename);
+                    case "watch": return new WatchCommand(cfg.sourceFilename);
+                    default: throw new ApplicationException($"Unknown command: '{cfg._RoutePath}'!");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("*** Error found in command line: {0}", ex.Message);
+                Console.WriteLine(@"
+Usage:
+
+csrun.exe <source filename> // run main section
+csrun.exe -f <source filename>
+csrun.exe test -f <source filename> // run tests
+csrun.exe watch -f <source filename> // run tests whenever the source file changes
+");
+                Environment.Exit(1);
+                throw new ApplicationException("this is never reached. it just soothes the compiler");
             }
         }
 
