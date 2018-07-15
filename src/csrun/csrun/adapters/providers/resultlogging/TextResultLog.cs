@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace csrun.adapters.providers
+namespace csrun.adapters.providers.resultlogging
 {
-    internal interface IResultLog {
-        void DisplayCompilerErrors(string[] errors);
-        void DisplayRuntimeFailure(string failure);
-        void DisplayTestFailure(string label, string failure);
-        void DisplayTestResults((bool success, string label)[] results);
-    }
-
-    
-    internal class ResultLog : IResultLog
+    internal class TextResultLog : IResultLog
     {
         public void DisplayCompilerErrors(string[] errors) {
             Console.WriteLine("\n*** Compiler Errors ***");

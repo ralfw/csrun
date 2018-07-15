@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using csrun.adapters.providers;
+using csrun.adapters.providers.resultlogging;
 using csrun.integration;
 using NUnit.Framework;
 
@@ -20,7 +21,7 @@ namespace csrun.tests
         public void Test_functions()
         {
             var fs = new Filesystem();
-            var fl = new ResultLog();
+            var fl = new TextResultLog();
             var cmd = new CLI.RunCommand("test_addition.csrun");
             var sut = new App(fs, fl, cmd);
             
@@ -38,8 +39,21 @@ namespace csrun.tests
         public void Test_tests()
         {
             var fs = new Filesystem();
-            var fl = new ResultLog();
-            var cmd = new CLI.TestCommand("test_tests.csrun");
+            var fl = new TextResultLog();
+            var cmd = new CLI.TestCommand("test_tests.csrun", false);
+            var sut = new App(fs, fl, cmd);
+
+            var output = ConsoleOutput.Capture(() => sut.Execute());
+
+            Console.WriteLine(output);
+        }        
+        
+        [Test, Explicit]
+        public void Test_tests_with_json_outptu()
+        {
+            var fs = new Filesystem();
+            var fl = new JsonResultLog();
+            var cmd = new CLI.TestCommand("test_tests.csrun", true);
             var sut = new App(fs, fl, cmd);
 
             var output = ConsoleOutput.Capture(() => sut.Execute());
@@ -61,7 +75,7 @@ Assert.AreEqual(42,0);";
             File.WriteAllText(CSRUN_FILENAME, csrunText);
 
             var mockResultLog = new MockResultLog();
-            var sut = new App(new Filesystem(), mockResultLog, new CLI.TestCommand(CSRUN_FILENAME));
+            var sut = new App(new Filesystem(), mockResultLog, new CLI.TestCommand(CSRUN_FILENAME, false));
 
             sut.Execute();
 

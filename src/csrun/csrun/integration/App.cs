@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using csrun.adapters.providers;
+using csrun.adapters.providers.resultlogging;
 using csrun.data.domain;
 using csrun.domain.compiletime;
 using csrun.domain.runtime;

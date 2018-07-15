@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using csrun.adapters.providers;
+using csrun.adapters.providers.resultlogging;
 using csrun.integration;
 
 namespace csrun.adapters.controllers
@@ -20,10 +22,21 @@ namespace csrun.adapters.controllers
             var cmd = CLI.Parse(args);
             
             var fs = new Filesystem();
-            var ui = new ResultLog();
+            var ui = Choose_result_log();
             var app = new App(fs, ui, cmd);
             
             app.Execute();
+
+
+            IResultLog Choose_result_log() {
+                switch (cmd) {
+                    case CLI.TestCommand tc:
+                        Console.WriteLine(tc.JsonOutput);
+                        return tc.JsonOutput ? (IResultLog)new JsonResultLog() : (IResultLog)new TextResultLog();
+                    default: 
+                        return new TextResultLog(); 
+                }
+            }
         }
     }
 }

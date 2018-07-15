@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using csrun.adapters.providers;
+using csrun.adapters.providers.resultlogging;
 using csrun.data.domain;
 using csrun.domain.runtime;
 

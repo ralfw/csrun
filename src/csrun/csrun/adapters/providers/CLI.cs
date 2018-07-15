@@ -21,7 +21,8 @@ namespace csrun.adapters.providers
                 new Route("run", isDefault:true)
                     .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true),
                 new Route("test")
-                    .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true),
+                    .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true)
+                    .Param("jsonOutput", "json"),
                 new Route("watch")
                     .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true));
 
@@ -33,7 +34,7 @@ namespace csrun.adapters.providers
                 switch (cfg._RoutePath)
                 {
                     case "run": return new RunCommand(cfg.sourceFilename);
-                    case "test": return new TestCommand(cfg.sourceFilename);
+                    case "test": return new TestCommand(cfg.sourceFilename, cfg.jsonOutput);
                     case "watch": return new WatchCommand(cfg.sourceFilename);
                     default: throw new ApplicationException($"Unknown command: '{cfg._RoutePath}'!");
                 }
@@ -70,10 +71,15 @@ csrun.exe watch -f <source filename> // run tests whenever the source file chang
             internal RunCommand(string sourceFilename) : base(sourceFilename) {}
         }
         
-        public class TestCommand : Command {
-            internal TestCommand(string sourceFilename) : base(sourceFilename) {}
+        public class TestCommand : Command
+        {
+            internal TestCommand(string sourceFilename, bool jsonOutput) : base(sourceFilename) {
+                this.JsonOutput = jsonOutput;
+            }
+            
+            public bool JsonOutput { get; }
         }
-        
+
         public class WatchCommand : Command {
             internal WatchCommand(string sourceFilename) : base(sourceFilename) {}
         }

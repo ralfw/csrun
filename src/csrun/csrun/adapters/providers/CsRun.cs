@@ -18,8 +18,8 @@ namespace csrun.adapters.providers
             ProcessStartInfo Create_process_info() {
                 var exeFilepath = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 return IsRunningOnMono()
-                    ? new ProcessStartInfo("mono", $"\"{exeFilepath}\" test -f \"{csrunFilename}\"")
-                    : new ProcessStartInfo(exeFilepath, $"test -f \"{csrunFilename}\"");
+                    ? new ProcessStartInfo("mono", $"\"{exeFilepath}\" test -f \"{csrunFilename}\" -json")
+                    : new ProcessStartInfo(exeFilepath, $"test -f \"{csrunFilename}\" -json");
             }
 
             bool IsRunningOnMono() => (Type.GetType("Mono.Runtime") != null);
