@@ -31,7 +31,6 @@ namespace csrun.adapters.controllers
             IResultLog Choose_result_log() {
                 switch (cmd) {
                     case CLI.TestCommand tc:
-                        Console.WriteLine(tc.JsonOutput);
                         return tc.JsonOutput ? (IResultLog)new JsonResultLog() : (IResultLog)new TextResultLog();
                     default: 
                         return new TextResultLog(); 

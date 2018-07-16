@@ -22,7 +22,7 @@ namespace csrun.tests
         {
             var fs = new Filesystem();
             var fl = new TextResultLog();
-            var cmd = new CLI.RunCommand("test_addition.csrun");
+            var cmd = new CLI.RunCommand("App_tests_with_addition.csrun");
             var sut = new App(fs, fl, cmd);
             
             var output = ConsoleOutput.Capture(() => sut.Execute());
@@ -40,7 +40,7 @@ namespace csrun.tests
         {
             var fs = new Filesystem();
             var fl = new TextResultLog();
-            var cmd = new CLI.TestCommand("test_tests.csrun", false);
+            var cmd = new CLI.TestCommand("App_tests_with_failure.csrun", false);
             var sut = new App(fs, fl, cmd);
 
             var output = ConsoleOutput.Capture(() => sut.Execute());
@@ -53,7 +53,7 @@ namespace csrun.tests
         {
             var fs = new Filesystem();
             var fl = new JsonResultLog();
-            var cmd = new CLI.TestCommand("test_tests.csrun", true);
+            var cmd = new CLI.TestCommand("App_tests_with_failure.csrun", true);
             var sut = new App(fs, fl, cmd);
 
             var output = ConsoleOutput.Capture(() => sut.Execute());

@@ -46,6 +46,7 @@
     <Compile Include="ConsoleOutput.cs" />
     <Compile Include="CSCompiler_tests.cs" />
     <Compile Include="CSRenderer_tests.cs" />
+    <Compile Include="CsRun_tests.cs" />
     <Compile Include="Dissection_tests.cs" />
     <Compile Include="Executable_tests.cs" />
     <Compile Include="FailureMapper_tests.cs" />
@@ -54,10 +55,13 @@
     <Compile Include="Spikes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="test_tests.csrun">
+    <Content Include="App_tests_with_failure.csrun">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="test_addition.csrun">
+    <Content Include="CsRun_tests_with_failure.csrun">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_tests_with_addition.csrun">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="paket.references" />

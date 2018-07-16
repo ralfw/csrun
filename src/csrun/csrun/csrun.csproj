@@ -53,6 +53,7 @@
     <Compile Include="data\domain\OriginLabels.cs" />
     <Compile Include="data\domain\RuntimeResults.cs" />
     <Compile Include="data\domain\Sourcecode.cs" />
+    <Compile Include="data\dto\ResultLogDtos.cs" />
     <Compile Include="domain\compiletime\CSCompiler.cs" />
     <Compile Include="domain\compiletime\Rendering.cs" />
     <Compile Include="domain\compiletime\Dissection.cs" />
