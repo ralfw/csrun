@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
 using csrun.data.dto;
-using NUnit.Framework;
 
 namespace csrun.adapters.providers
 {
@@ -58,8 +57,9 @@ namespace csrun.adapters.providers
         }
         
         
-        static ResultLogDto Deserialize_result(string result)
-        {
+        static ResultLogDto Deserialize_result(string result) {
+            if (string.IsNullOrEmpty(result)) throw new InvalidOperationException("No results received from background test process!");
+            
             var resultReader = new StringReader(result);
             var resultTypeName = resultReader.ReadLine();
             var resultJson = resultReader.ReadToEnd();

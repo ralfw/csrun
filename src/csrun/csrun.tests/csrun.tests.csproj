@@ -58,6 +58,9 @@
     <Content Include="App_tests_with_failure.csrun">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="CsRun_tests_with_compiler_error.csrun">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="CsRun_tests_with_failure.csrun">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
