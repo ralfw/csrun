@@ -4,6 +4,7 @@ using System.Runtime.Remoting.Messaging;
 using csrun.adapters.providers;
 using csrun.adapters.providers.resultlogging;
 using csrun.data.domain;
+using csrun.data.dto;
 using csrun.domain.runtime;
 
 namespace csrun.integration
@@ -16,6 +17,23 @@ namespace csrun.integration
         public ResultEvaluation(Sourcecode csSource, IResultLog log) {
             _csSource = csSource;
             _log = log;
+        }
+
+
+        public void Handle(ResultLogDto result) {
+            switch (result) {
+                case CompilerErrorLogDto cel:
+                    _log.DisplayCompilerErrors(cel.Errors);
+                    break;
+                case RuntimeFailureLogDto rfl:
+                    _log.DisplayRuntimeFailure(rfl.Message);
+                    break;
+                case TestResultsLogDto trl:
+                    foreach(var f in trl.Failures)
+                        _log.DisplayTestFailure(f.Label, f.Message);
+                    _log.DisplayTestResults(trl.Results);
+                    break;
+            }
         }
 
         

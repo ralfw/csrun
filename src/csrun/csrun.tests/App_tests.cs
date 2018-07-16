@@ -62,9 +62,23 @@ namespace csrun.tests
         }
         
         
+        [Test, Explicit]
+        public void Test_watch()
+        {
+            var fs = new Filesystem();
+            var fl = new TextResultLog();
+            var cmd = new CLI.WatchCommand("App_tests_with_failure.csrun");
+            var sut = new App(fs, fl, cmd);
+
+            var output = ConsoleOutput.Capture(() => sut.Execute());
+
+            Console.WriteLine(output);
+        }
+        
+        
         [Test]
         // The solution for this lies in TestRunner{}
-        public void Bugfix_Test_errors_dont_get_accumulate_by_NUnit()
+        public void Bugfix_for_Test_errors_get_accumulate_by_NUnit()
         {
             const string CSRUN_FILENAME = "test.csrun";
             

@@ -34,8 +34,10 @@ namespace csrun.integration
             var timer = new BlockingTimer();
             var observer = new SourceObservation(_fs, timer);
             observer.WatchForChange(_cmd.SourceFilename,
-                () => CsRun.Run(_cmd.SourceFilename)
-            );
+                () => {
+                    var result = CsRun.Run(_cmd.SourceFilename);
+                    _reval.Handle(result);
+                });
         }
         
         
