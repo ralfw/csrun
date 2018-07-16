@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using csrun.adapters.providers;
 using csrun.adapters.providers.resultlogging;
 using csrun.data.domain;
@@ -36,7 +37,7 @@ namespace csrun.integration
             observer.WatchForChange(_cmd.SourceFilename,
                 () => {
                     var result = CsRun.Run(_cmd.SourceFilename);
-                    _reval.Handle(result);
+                    ResultEvaluation.Handle(result, _resultLog);
                 });
         }
         

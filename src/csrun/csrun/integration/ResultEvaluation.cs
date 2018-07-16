@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using csrun.adapters.providers;
@@ -17,23 +18,6 @@ namespace csrun.integration
         public ResultEvaluation(Sourcecode csSource, IResultLog log) {
             _csSource = csSource;
             _log = log;
-        }
-
-
-        public void Handle(ResultLogDto result) {
-            switch (result) {
-                case CompilerErrorLogDto cel:
-                    _log.DisplayCompilerErrors(cel.Errors);
-                    break;
-                case RuntimeFailureLogDto rfl:
-                    _log.DisplayRuntimeFailure(rfl.Message);
-                    break;
-                case TestResultsLogDto trl:
-                    foreach(var f in trl.Failures)
-                        _log.DisplayTestFailure(f.Label, f.Message);
-                    _log.DisplayTestResults(trl.Results);
-                    break;
-            }
         }
 
         
@@ -87,6 +71,23 @@ namespace csrun.integration
                 => results.OfType<TestResult>()
                           .Select(r => ((bool success, string label))(r is TestSuccess, r.Label))
                           .ToArray();
+        }
+        
+        
+        public static void Handle(ResultLogDto result, IResultLog log) {
+            switch (result) {
+                case CompilerErrorLogDto cel:
+                    log.DisplayCompilerErrors(cel.Errors);
+                    break;
+                case RuntimeFailureLogDto rfl:
+                    log.DisplayRuntimeFailure(rfl.Message);
+                    break;
+                case TestResultsLogDto trl:
+                    foreach(var f in trl.Failures)
+                        log.DisplayTestFailure(f.Label, f.Message);
+                    log.DisplayTestResults(trl.Results);
+                    break;
+            }
         }
     }
 }
