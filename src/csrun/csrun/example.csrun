@@ -1,18 +1,18 @@
 var a = 1;
 var b = 2;
 var r = Add(a,b);
-Console.WriteLine("{0}+{1}={2}",a,b,r);
+WriteLine("{0}+{1}={2}",a,b,r);
 
 #functions
 int Add(int a, int b) {
     return a + b;
 }
 
-#test addition mit positiven zahlen
-Assert.AreEqual(3, Add(1,2));
+#test adding positive numbers
+AreEqual(3, Add(1,2));
 
-#test addition mit negativer zahl
-Assert.AreEqual(3, Add(4,-1));
+#test addition with a negative number
+AreEqual(3, Add(4,-1));
 
-#test addition mit zwei negativen zahlen
-Assert.AreEqual(-2, Add(-3,-1));
+#test adding only negative numbers
+AreEqual(-2, Add(-3,-1));

@@ -14,7 +14,7 @@ namespace csrun.integration
         private readonly Filesystem _fs;
         private readonly IResultLog _resultLog;
         private readonly CLI.Command _cmd;
-        private ResultEvaluation _reval;
+        private ResultEvaluation _reEval;
 
         public App(Filesystem fs, IResultLog resultLog, CLI.Command cmd) {
             _fs = fs;
@@ -44,10 +44,10 @@ namespace csrun.integration
         
         private void ExecuteOnce() {
             var csSource = Transpile(_cmd.SourceFilename);
-            _reval = new ResultEvaluation(csSource, _resultLog);
+            _reEval = new ResultEvaluation(csSource, _resultLog);
             CSCompiler.Compile(csSource,
                 onSuccess: Run,
-                onFailure: _reval.HandleCompilerErrors
+                onFailure: _reEval.HandleCompilerErrors
             );
         }
 
@@ -62,7 +62,7 @@ namespace csrun.integration
         
         void Run(Executable exe) {
             var results = SelectRunner().Run(exe);
-            _reval.HandleRuntimeResults(results.ToArray());
+            _reEval.HandleRuntimeResults(results.ToArray());
             
             
             IRunner SelectRunner() {
