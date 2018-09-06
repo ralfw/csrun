@@ -53,5 +53,38 @@ namespace csrun.tests
             
             Assert.IsTrue(result.First().StartsWith($"origin.csrun-3,"));
         }
+        
+        
+        [Test]
+        public void MapCompilerError_before_origin()
+        {
+            var csSource = @"1
+2
+//#origin 1,origin.csrun
+4->1
+5->2
+//#endorigin
+7".Split('\n');
+
+            try
+            {
+                var result = FailureMapper.MapCompiletimeErrors(new[]
+                {
+                    new CompilerError
+                    {
+                        Filename = "destination.cs",
+                        LineNumber = 1,
+                        ColumnNumber = 0,
+                        Description = "desc"
+                    }
+                }, csSource);
+
+                Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message.IndexOf("Cannot map") >= 0);
+            }
+        }
     }
 }

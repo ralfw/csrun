@@ -22,8 +22,13 @@ namespace csrun.domain.runtime
             return compilerErrors.Select(MapError).ToArray();
 
             string MapError(CompilerError error) {
-                var (originFilename, originLineNumber) = MapLineNumber(error.LineNumber, csSourceText);
-                return $"{originFilename}-{originLineNumber},{error.ColumnNumber}: {error.Description}";
+                try {
+                    var (originFilename, originLineNumber) = MapLineNumber(error.LineNumber, csSourceText);
+                    return $"{originFilename}-{originLineNumber},{error.ColumnNumber}: {error.Description}";
+                }
+                catch (Exception ex) {
+                    throw new InvalidOperationException($"Cannot map C# compiler error <{error.Description}> @ ({error.LineNumber},{error.ColumnNumber}) to .csrun source!", ex);
+                }
             }
         }
 
@@ -33,7 +38,7 @@ namespace csrun.domain.runtime
                     return (originFilename,
                             originStartLineNumber + (lineNumber - i) - 1);
                 }
-            throw new InvalidOperationException($"Missing origin label for line number {lineNumber}!");
+            throw new InvalidOperationException($"Missing //#origin label for line number {lineNumber}!");
         }
     }
 }
