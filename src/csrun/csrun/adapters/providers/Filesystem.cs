@@ -6,6 +6,9 @@ namespace csrun.adapters.providers
 {
     internal class Filesystem
     {
+        private readonly string _templateFilename;
+        public Filesystem(string templateFilename) { _templateFilename = templateFilename; }
+        
         public Sourcecode ReadSource(string filename) {
             return new Sourcecode {
                 Filename = filename,
@@ -15,9 +18,8 @@ namespace csrun.adapters.providers
 
         
         public string[] LoadTemplate() {
-            const string RENDER_TEMPLATE_FILENAME = "template.cs";
             var exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            var templateFilepath = Path.Combine(exePath, RENDER_TEMPLATE_FILENAME);
+            var templateFilepath = Path.Combine(exePath, _templateFilename);
 
             return File.ReadAllLines(templateFilepath);
         }

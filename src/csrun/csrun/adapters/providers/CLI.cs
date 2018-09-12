@@ -14,17 +14,22 @@ namespace csrun.adapters.providers
     {
         public static Command Parse(string[] args)
         {
+            const string DEFAULT_TEMPLATE_FILENAME = "template.cs";
+            
             if (args.Length == 1 && Path.GetExtension(args[0])?.ToLower() == ".csrun")
-                return new RunCommand(args[0]);
+                return new RunCommand(args[0],DEFAULT_TEMPLATE_FILENAME);
             
             var schema = new appcfg.AppCfgSchema("csrun.exe.config.json", 
                 new Route("run", isDefault:true)
-                    .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true),
+                    .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true)
+                    .Param("templateFilename", "t,template", ValueTypes.String, defaultValue: DEFAULT_TEMPLATE_FILENAME),
                 new Route("test")
                     .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true)
-                    .Param("jsonOutput", "json"),
+                    .Param("jsonOutput", "json")
+                    .Param("templateFilename", "t,template", ValueTypes.String, defaultValue: DEFAULT_TEMPLATE_FILENAME),
                 new Route("watch")
-                    .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true));
+                    .Param("sourceFilename", "s,f,source,filename", ValueTypes.String, isRequired:true)
+                    .Param("templateFilename", "t,template", ValueTypes.String, defaultValue: DEFAULT_TEMPLATE_FILENAME));
 
             try
             {
@@ -33,9 +38,9 @@ namespace csrun.adapters.providers
 
                 switch (cfg._RoutePath)
                 {
-                    case "run": return new RunCommand(cfg.sourceFilename);
-                    case "test": return new TestCommand(cfg.sourceFilename, cfg.jsonOutput);
-                    case "watch": return new WatchCommand(cfg.sourceFilename);
+                    case "run": return new RunCommand(cfg.sourceFilename, cfg.templateFilename);
+                    case "test": return new TestCommand(cfg.sourceFilename, cfg.jsonOutput, cfg.templateFilename);
+                    case "watch": return new WatchCommand(cfg.sourceFilename, cfg.templateFilename);
                     default: throw new ApplicationException($"Unknown command: '{cfg._RoutePath}'!");
                 }
             }
@@ -46,9 +51,9 @@ namespace csrun.adapters.providers
 Usage:
 
 csrun.exe <source filename> // run main section
-csrun.exe -f <source filename>
-csrun.exe test -f <source filename> // run tests
-csrun.exe watch -f <source filename> // run tests whenever the source file changes
+csrun.exe -f <source filename> [ -t <template filename> ]
+csrun.exe test -f <source filename> [ -json ]  [ -t <template filename> ] // run tests
+csrun.exe watch -f <source filename>  [ -t <template filename> ] // run tests whenever the source file changes
 ");
                 Environment.Exit(1);
                 throw new ApplicationException("this is never reached. it just soothes the compiler");
@@ -57,23 +62,25 @@ csrun.exe watch -f <source filename> // run tests whenever the source file chang
 
 
         public class Command {
-            protected Command(string sourceFilename) {
+            protected Command(string sourceFilename, string templateFilename) {
                 if (Path.GetExtension(sourceFilename)?.ToLower() != ".csrun") 
                     throw new ApplicationException($"Source filename has invalid extension '{Path.GetExtension(sourceFilename)}'! '.csrun' required!");
                 
                 this.SourceFilename = sourceFilename;
+                this.TemplateFilename = templateFilename;
             }
             
             public string SourceFilename { get; }
+            public string TemplateFilename { get; }
         }
 
         public class RunCommand : Command {
-            internal RunCommand(string sourceFilename) : base(sourceFilename) {}
+            internal RunCommand(string sourceFilename, string templateFilename) : base(sourceFilename, templateFilename) {}
         }
         
         public class TestCommand : Command
         {
-            internal TestCommand(string sourceFilename, bool jsonOutput) : base(sourceFilename) {
+            internal TestCommand(string sourceFilename, bool jsonOutput, string templateFilename) : base(sourceFilename, templateFilename) {
                 this.JsonOutput = jsonOutput;
             }
             
@@ -81,7 +88,7 @@ csrun.exe watch -f <source filename> // run tests whenever the source file chang
         }
 
         public class WatchCommand : Command {
-            internal WatchCommand(string sourceFilename) : base(sourceFilename) {}
+            internal WatchCommand(string sourceFilename, string templateFilename) : base(sourceFilename, templateFilename) {}
         }
     }
 }

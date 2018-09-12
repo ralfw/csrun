@@ -1,7 +1,7 @@
 var a = 1;
 var b = 2;
 var r = Add(a,b);
-WriteLine("{0}+{1}={2}",a,b,r);
+Console.WriteLine("{0}+{1}={2}",a,b,r);
 
 #functions
 int Add(int a, int b) {
@@ -9,10 +9,10 @@ int Add(int a, int b) {
 }
 
 #test adding positive numbers
-AreEqual(3, Add(1,2));
+Assert.AreEqual(3, Add(1,2));
 
 #test addition with a negative number
-AreEqual(3, Add(4,-1));
+Assert.AreEqual(3, Add(4,-1));
 
 #test adding only negative numbers
-AreEqual(-2, Add(-3,-1));
+Assert.AreEqual(-2, Add(-3,-1));

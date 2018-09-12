@@ -11,6 +11,8 @@ namespace csrun.tests
     [TestFixture]
     public class App_tests
     {
+        private const string TEMPLATE_FILENAME = "template.cs";
+        
         [SetUp]
         public void Setup() {
             Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
@@ -20,9 +22,9 @@ namespace csrun.tests
         [Test]
         public void Test_functions()
         {
-            var fs = new Filesystem();
+            var fs = new Filesystem(TEMPLATE_FILENAME);
             var fl = new TextResultLog();
-            var cmd = new CLI.RunCommand("App_tests_with_addition.csrun");
+            var cmd = new CLI.RunCommand("App_tests_with_addition.csrun", TEMPLATE_FILENAME);
             var sut = new App(fs, fl, cmd);
             
             var output = ConsoleOutput.Capture(() => sut.Execute());
@@ -38,9 +40,9 @@ namespace csrun.tests
          */
         public void Test_tests()
         {
-            var fs = new Filesystem();
+            var fs = new Filesystem(TEMPLATE_FILENAME);
             var fl = new TextResultLog();
-            var cmd = new CLI.TestCommand("App_tests_with_failure.csrun", false);
+            var cmd = new CLI.TestCommand("App_tests_with_failure.csrun", false, TEMPLATE_FILENAME);
             var sut = new App(fs, fl, cmd);
 
             var output = ConsoleOutput.Capture(() => sut.Execute());
@@ -51,9 +53,9 @@ namespace csrun.tests
         [Test, Explicit]
         public void Test_tests_with_json_outptu()
         {
-            var fs = new Filesystem();
+            var fs = new Filesystem(TEMPLATE_FILENAME);
             var fl = new JsonResultLog();
-            var cmd = new CLI.TestCommand("App_tests_with_failure.csrun", true);
+            var cmd = new CLI.TestCommand("App_tests_with_failure.csrun", true, TEMPLATE_FILENAME);
             var sut = new App(fs, fl, cmd);
 
             var output = ConsoleOutput.Capture(() => sut.Execute());
@@ -75,7 +77,9 @@ Assert.AreEqual(42,0);";
             File.WriteAllText(CSRUN_FILENAME, csrunText);
 
             var mockResultLog = new MockResultLog();
-            var sut = new App(new Filesystem(), mockResultLog, new CLI.TestCommand(CSRUN_FILENAME, false));
+            var sut = new App(new Filesystem(TEMPLATE_FILENAME), 
+                              mockResultLog, 
+                              new CLI.TestCommand(CSRUN_FILENAME, false, TEMPLATE_FILENAME));
 
             sut.Execute();
 

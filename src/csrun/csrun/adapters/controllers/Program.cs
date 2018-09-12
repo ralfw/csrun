@@ -21,7 +21,7 @@ namespace csrun.adapters.controllers
         {
             var cmd = CLI.Parse(args);
             
-            var fs = new Filesystem();
+            var fs = new Filesystem(cmd.TemplateFilename);
             var ui = Choose_result_log();
             var app = new App(fs, ui, cmd);
             

@@ -14,7 +14,7 @@ namespace csrun.tests
         {
             const string FILENAME = "test.txt";
             File.WriteAllText(FILENAME, "a");
-            var sut = new Filesystem();
+            var sut = new Filesystem("template.cs");
             
             var timestamp = File.GetLastWriteTime(FILENAME);
             var result = sut.FileHasChanged(FILENAME, ref timestamp);
