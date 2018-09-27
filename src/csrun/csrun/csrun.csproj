@@ -66,10 +66,10 @@
     <Compile Include="integration\ResultEvaluation.cs" />
     <Compile Include="integration\SourceObservation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="template.cs">
+    <Content Include="template_cs6.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="template_cs5.cs">
+    <Content Include="template.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
